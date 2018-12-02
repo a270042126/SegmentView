@@ -25,8 +25,9 @@ class Test1ViewController: UIViewController {
             controllerArray.append(vC)
         }
         let config = SegmentConfiguration()
-        segementVC = SegmentView(frame: .zero, configuration: config, titleArray: titleArray, controllerArray: controllerArray)
-       
+        segementVC = SegmentView(frame: .zero, configuration: config)
+        segementVC.titleArray = titleArray
+        segementVC.controllerArray = controllerArray
         
         self.view.addSubview(segementVC)
     }

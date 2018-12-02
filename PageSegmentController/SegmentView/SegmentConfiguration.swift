@@ -34,4 +34,10 @@ class SegmentConfiguration {
     public var coverHeight: CGFloat = 30
     public var coverBackgroundColor: UIColor = UIColor.red
     public var coverCornerRadius: CGFloat = 15
+    //频道按钮
+    public var isShowChannelButton = true
+    public var channelButtonImage = ""
+    public var channelButtonText = "﹢"
+    public var channelBUttonFontSize: CGFloat = 25
+    public var channelButtonTextColor: UIColor = UIColor.black
 }

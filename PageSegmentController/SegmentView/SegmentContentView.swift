@@ -34,14 +34,17 @@ class SegmentContentView: UIView {
     }()
    
     //存储各栏目的controller
-    private var controllerArray: [UIViewController]
-
-    init(frame: CGRect, controllerArray: [UIViewController]) {
-        self.controllerArray = controllerArray
-        super.init(frame: frame)
-        for vc in controllerArray {
-             mainScrollView.addSubview(vc.view)
+    var controllerArray: [UIViewController]?{
+        didSet{
+            guard let controllerArray = controllerArray else {return}
+            for vc in controllerArray {
+                mainScrollView.addSubview(vc.view)
+            }
         }
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         self.addSubview(mainScrollView)
     }
     
@@ -53,11 +56,13 @@ class SegmentContentView: UIView {
         super.layoutSubviews()
        
         mainScrollView.frame = self.bounds
-        mainScrollView.contentSize =  CGSize(width: self.bounds.width * CGFloat(controllerArray.count), height: self.bounds.height)
+        
+        guard  controllerArray != nil && controllerArray!.count > 0 else {return}
+        mainScrollView.contentSize =  CGSize(width: self.bounds.width * CGFloat(controllerArray!.count), height: self.bounds.height)
         mainScrollView.contentOffset = CGPoint(x: self.bounds.width * CGFloat(currentIndex), y: 0)
         
-        for(index, _) in controllerArray.enumerated(){
-            let controller = controllerArray[index]
+        for(index, _) in controllerArray!.enumerated(){
+            let controller = controllerArray![index]
             controller.view.frame = CGRect(x: self.bounds.width * CGFloat(index), y: 0, width: self.bounds.width, height: self.bounds.height)
         }
     }
@@ -72,6 +77,7 @@ extension SegmentContentView: UIScrollViewDelegate{
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if isForbidScroll {return}
+        guard let controllerArray = controllerArray else {return}
         
         var progress: CGFloat = 0
         var targetIndex = 0

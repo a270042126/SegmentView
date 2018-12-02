@@ -8,22 +8,55 @@
 
 import UIKit
 
+protocol SegmentViewDelegate:class {
+    func segmentViewChannelButtonClicked()
+}
+
 class SegmentView: UIView {
     
+    weak var delegate: SegmentViewDelegate?
+    var controllerArray: [UIViewController]?{
+        didSet{
+            contentView.controllerArray = controllerArray
+        }
+    }
+    var titleArray: [String]?{
+        didSet{
+            titleView.titleArray = titleArray
+        }
+    }
     
-    var config: SegmentConfiguration
+    lazy var titleView: SegmentTitleView = SegmentTitleView(frame: .zero, config: config)
+    lazy var contentView: SegmentContentView = SegmentContentView(frame: .zero)
     
-    lazy var titleView: SegmentTitleView = SegmentTitleView(frame: .zero, config: config, titleArray: titleArray)
-    lazy var contentView: SegmentContentView = SegmentContentView(frame: .zero, controllerArray: controllerArray)
-    private var controllerArray: [UIViewController]
-    private var titleArray: [String]
+    private lazy var channelButton:UIButton = {
+        let channelButton = UIButton()
+        if config.channelButtonImage != ""{
+            channelButton.setImage(UIImage(named: config.channelButtonImage), for: .normal)
+        }else{
+            channelButton.backgroundColor = UIColor.clear
+            channelButton.setTitle(config.channelButtonText, for: .normal)
+            channelButton.titleLabel?.font = UIFont.systemFont(ofSize: config.channelBUttonFontSize)
+            channelButton.setTitleColor(config.channelButtonTextColor, for: .normal)
+        }
+        channelButton.addTarget(self, action: #selector(channelButtonClick), for: .touchUpInside)
+        return channelButton
+    }()
     
-    init(frame: CGRect,configuration: SegmentConfiguration, titleArray: [String], controllerArray: [UIViewController]) {
+    private var config: SegmentConfiguration
+    
+    init(frame: CGRect,configuration: SegmentConfiguration) {
         self.config = configuration
-        self.titleArray = titleArray
-        self.controllerArray = controllerArray
         super.init(frame: frame)
-        setUI()
+        
+        self.backgroundColor = UIColor.white
+        titleView.delegate = self
+        contentView.delegate = self
+        addSubview(titleView)
+        addSubview(contentView)
+        if config.isShowChannelButton {
+            addSubview(channelButton)
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -35,19 +68,21 @@ class SegmentView: UIView {
         
         let sWidth = self.bounds.width
         let sHeight = self.bounds.height
-        titleView.frame = CGRect(x: 0, y: 0, width: sWidth, height: config.titleHeight)
+        
+        if config.isShowChannelButton{
+             titleView.frame = CGRect(x: 0, y: 0, width: sWidth - config.titleHeight, height: config.titleHeight)
+             channelButton.frame = CGRect(x: titleView.frame.maxX, y: 0, width: config.titleHeight, height: config.titleHeight)
+        }else{
+             titleView.frame = CGRect(x: 0, y: 0, width: sWidth, height: config.titleHeight)
+        }
+        
         contentView.frame = CGRect(x: 0, y: titleView.frame.maxY, width: sWidth, height: sHeight - config.titleHeight)
     }
 }
 
 extension SegmentView{
-    
-    private func setUI(){
-        self.backgroundColor = UIColor.white
-        titleView.delegate = self
-        contentView.delegate = self
-        addSubview(titleView)
-        addSubview(contentView)
+    @objc private func channelButtonClick(){
+        delegate?.segmentViewChannelButtonClicked()
     }
 }
 

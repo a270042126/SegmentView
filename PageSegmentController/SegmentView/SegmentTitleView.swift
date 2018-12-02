@@ -15,11 +15,58 @@ class SegmentTitleView: UIView {
     
     weak var delegate: SegmentTitleViewDelegate?
     
-    private var config: SegmentConfiguration
+    private var config: SegmentConfiguration!
+    
+    var titleArray: [String]?{
+        didSet{
+            guard let titleArray = titleArray else {return}
+            //栏目按钮
+            for(index, value) in titleArray.enumerated(){
+                let titleButton = UIButton()
+                titleButton.setTitle(value, for: .normal)
+                titleButton.setTitleColor(config.titleColor, for: .normal)
+                titleButton.setTitleColor(config.selectedTitleColor, for: .selected)
+                titleButton.backgroundColor = UIColor.clear
+                titleButton.tag = 100 + index
+                titleButton.titleLabel?.font = UIFont.systemFont(ofSize: config.titleFontSize)
+                titleButton.addTarget(self, action: #selector(scrollViewSelectToIndex), for:.touchUpInside)
+                scrollView.addSubview(titleButton)
+                if index == 0{
+                    titleButton.isSelected = true
+                    if config.isTitleScaleEnabled {
+                        let scale = config.titleMaximumScaleFactor
+                        titleButton.transform = CGAffineTransform(scaleX: scale, y: scale)
+                    }
+                }
+                buttonArray.append(titleButton)
+            }
+            
+            //滑块
+            if config.isShowSlider {
+                var sliderViewWidth: CGFloat = 0
+                if config.titleWidth == 0{
+                    sliderViewWidth = getTextWidth(text: buttonArray.first!.titleLabel!.text!, height: config.titleHeight, fontSize:  buttonArray.first!.titleLabel!.font.pointSize)
+                }else{
+                    sliderViewWidth = config.titleWidth
+                }
+                
+                switch config.sliderType {
+                case .line:
+                    sliderView.frame = CGRect(x: config.padding, y: config.titleHeight - config.lineHeight, width: sliderViewWidth, height: config.lineHeight)
+                case .cover:
+                    sliderView.frame = CGRect(x: 0, y: (config.titleHeight - config.coverHeight) / 2, width: sliderViewWidth, height: config.coverHeight)
+                }
+                scrollView.addSubview(sliderView)
+                scrollView.sendSubviewToBack(sliderView)
+            }
+        }
+    }
+    
     private lazy var buttonArray = [UIButton]()
     
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
+        scrollView.backgroundColor = UIColor.clear
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.scrollsToTop = false
         scrollView.isScrollEnabled = true
@@ -27,15 +74,24 @@ class SegmentTitleView: UIView {
     }()
     
     //滑块
-    private lazy var sliderView: UIView = UIView()
+    private lazy var sliderView: UIView = {
+        let sliderView = UIView()
+        switch config.sliderType {
+        case .line:
+            sliderView.backgroundColor = config.lineBackgroundColor
+        case .cover:
+            sliderView.backgroundColor = config.coverBackgroundColor
+            sliderView.layer.masksToBounds = true
+            sliderView.layer.cornerRadius = config.coverCornerRadius
+        }
+        return sliderView
+    }()
     
-    private var titleArray: [String]
     //选择的栏目
     private var currentIndex: Int = 0
     
-    init(frame: CGRect, config:SegmentConfiguration, titleArray: [String]) {
+    init(frame: CGRect, config:SegmentConfiguration) {
         self.config = config
-        self.titleArray = titleArray
         super.init(frame: frame)
         setUI()
     }
@@ -49,6 +105,7 @@ class SegmentTitleView: UIView {
         let sHeight = self.bounds.height
         scrollView.frame = self.bounds
         
+        guard buttonArray.count > 0 else {return}
         //按钮组
         var contentWidth: CGFloat = 0
         for(index, _) in buttonArray.enumerated(){
@@ -76,55 +133,10 @@ extension SegmentTitleView {
     
     private func setUI(){
         self.addSubview(scrollView)
-        //栏目按钮
-        for(index, value) in titleArray.enumerated(){
-            let titleButton = UIButton()
-            titleButton.setTitle(value, for: .normal)
-            titleButton.setTitleColor(config.titleColor, for: .normal)
-            titleButton.setTitleColor(config.selectedTitleColor, for: .selected)
-            titleButton.backgroundColor = UIColor.clear
-            titleButton.tag = 100 + index
-            titleButton.titleLabel?.font = UIFont.systemFont(ofSize: config.titleFontSize)
-            titleButton.addTarget(self, action: #selector(scrollViewSelectToIndex), for:.touchUpInside)
-            scrollView.addSubview(titleButton)
-            if index == 0{
-                titleButton.isSelected = true
-                if config.isTitleScaleEnabled {
-                    let scale = config.titleMaximumScaleFactor
-                    titleButton.transform = CGAffineTransform(scaleX: scale, y: scale)
-                }
-            }
-            buttonArray.append(titleButton)
-        }
-        
-        //滑块
-        if config.isShowSlider {
-            var sliderViewWidth: CGFloat = 0
-            if config.titleWidth == 0{
-                sliderViewWidth = getTextWidth(text: buttonArray.first!.titleLabel!.text!, height: config.titleHeight, fontSize:  buttonArray.first!.titleLabel!.font.pointSize)
-            }else{
-                sliderViewWidth = config.titleWidth
-            }
-            
-            switch config.sliderType {
-            case .line:
-                sliderView.backgroundColor = config.lineBackgroundColor
-                sliderView.frame = CGRect(x: config.padding, y: config.titleHeight - config.lineHeight, width: sliderViewWidth, height: config.lineHeight)
-            case .cover:
-                sliderView.backgroundColor = config.coverBackgroundColor
-                sliderView.layer.masksToBounds = true
-                sliderView.layer.cornerRadius = config.coverCornerRadius
-                sliderView.frame = CGRect(x: 0, y: (config.titleHeight - config.coverHeight) / 2, width: sliderViewWidth, height: config.coverHeight)
-            }
-           
-            scrollView.addSubview(sliderView)
-            scrollView.sendSubviewToBack(sliderView)
-        }
     }
     
     private func selectedButton(index:Int){
         let sWidth = self.bounds.width
-        
         var selectButton = buttonArray[currentIndex]
         selectButton.isSelected = false
         selectButton = buttonArray[index]
