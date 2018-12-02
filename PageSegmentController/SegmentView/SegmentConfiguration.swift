@@ -26,7 +26,7 @@ class SegmentConfiguration {
     public var isTitleScaleEnabled = false
     public var titleMaximumScaleFactor: CGFloat = 1.2
     //滑块
-    public var isShowSlider = true
+    public var isSliderEnable = true
     public var sliderType = SliderType.line
     public var lineHeight: CGFloat = 2
     public var lineBackgroundColor: UIColor = UIColor.orange
@@ -35,9 +35,5 @@ class SegmentConfiguration {
     public var coverBackgroundColor: UIColor = UIColor.red
     public var coverCornerRadius: CGFloat = 15
     //频道按钮
-    public var isShowChannelButton = true
-    public var channelButtonImage = ""
-    public var channelButtonText = "﹢"
-    public var channelBUttonFontSize: CGFloat = 25
-    public var channelButtonTextColor: UIColor = UIColor.black
+    public var isAddChannelEnabled = false
 }

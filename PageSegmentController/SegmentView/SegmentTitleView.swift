@@ -42,7 +42,7 @@ class SegmentTitleView: UIView {
             }
             
             //滑块
-            if config.isShowSlider {
+            if config.isSliderEnable {
                 var sliderViewWidth: CGFloat = 0
                 if config.titleWidth == 0{
                     sliderViewWidth = getTextWidth(text: buttonArray.first!.titleLabel!.text!, height: config.titleHeight, fontSize:  buttonArray.first!.titleLabel!.font.pointSize)
@@ -123,7 +123,7 @@ class SegmentTitleView: UIView {
         scrollView.contentSize = CGSize(width: contentWidth, height: sHeight)
         selectedButton(index: currentIndex)
         
-        if config.isShowSlider{
+        if config.isSliderEnable{
             moveSilder(moveX: buttonArray[currentIndex].frame.minX, changeWidth: buttonArray[currentIndex].frame.width)
         }
     }
@@ -171,7 +171,7 @@ extension SegmentTitleView {
         let index = sender.tag - 100
         selectedButton(index: index)
         
-        if config.isShowSlider {
+        if config.isSliderEnable {
             let selectButton = buttonArray[index]
             UIView.animate(withDuration: 0.25) {
                 self.moveSilder(moveX: selectButton.frame.minX, changeWidth: selectButton.frame.width)
@@ -210,7 +210,7 @@ extension SegmentTitleView{
         let moveX = moveTotalX * progress
         let moveWidth = (targetButton.frame.width - sourceButton.frame.width) * progress
 
-        if config.isShowSlider{
+        if config.isSliderEnable{
             moveSilder(moveX: sourceButton.frame.origin.x + moveX, changeWidth: sourceButton.frame.width + moveWidth)
         }
 
