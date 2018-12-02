@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		63B3E41F21B3B543008E2D3E /* SegmentView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B3E41B21B3B543008E2D3E /* SegmentView2.swift */; };
+		63B3E41F21B3B543008E2D3E /* SegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B3E41B21B3B543008E2D3E /* SegmentView.swift */; };
 		63B3E42021B3B543008E2D3E /* SegmentTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B3E41C21B3B543008E2D3E /* SegmentTitleView.swift */; };
 		63B3E42121B3B543008E2D3E /* SegmentContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B3E41D21B3B543008E2D3E /* SegmentContentView.swift */; };
 		63B3E42221B3B543008E2D3E /* SegmentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B3E41E21B3B543008E2D3E /* SegmentConfiguration.swift */; };
@@ -18,7 +18,7 @@
 		63DE94A821B2469800031E67 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 63DE94A621B2469800031E67 /* LaunchScreen.storyboard */; };
 		63DE94B321B2469800031E67 /* PageSegmentControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DE94B221B2469800031E67 /* PageSegmentControllerTests.swift */; };
 		63DE94BE21B2469800031E67 /* PageSegmentControllerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DE94BD21B2469800031E67 /* PageSegmentControllerUITests.swift */; };
-		63DE94CE21B265C500031E67 /* SegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DE94CD21B265C500031E67 /* SegmentView.swift */; };
+		63DE94CE21B265C500031E67 /* SegmentPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DE94CD21B265C500031E67 /* SegmentPageView.swift */; };
 		63DE94D021B267B200031E67 /* Test1ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DE94CF21B267B200031E67 /* Test1ViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -40,7 +40,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		63B3E41B21B3B543008E2D3E /* SegmentView2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentView2.swift; sourceTree = "<group>"; };
+		63B3E41B21B3B543008E2D3E /* SegmentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentView.swift; sourceTree = "<group>"; };
 		63B3E41C21B3B543008E2D3E /* SegmentTitleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentTitleView.swift; sourceTree = "<group>"; };
 		63B3E41D21B3B543008E2D3E /* SegmentContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentContentView.swift; sourceTree = "<group>"; };
 		63B3E41E21B3B543008E2D3E /* SegmentConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentConfiguration.swift; sourceTree = "<group>"; };
@@ -57,7 +57,7 @@
 		63DE94B921B2469800031E67 /* PageSegmentControllerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PageSegmentControllerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		63DE94BD21B2469800031E67 /* PageSegmentControllerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageSegmentControllerUITests.swift; sourceTree = "<group>"; };
 		63DE94BF21B2469800031E67 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		63DE94CD21B265C500031E67 /* SegmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentView.swift; sourceTree = "<group>"; };
+		63DE94CD21B265C500031E67 /* SegmentPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentPageView.swift; sourceTree = "<group>"; };
 		63DE94CF21B267B200031E67 /* Test1ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test1ViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -89,7 +89,7 @@
 		63B3E41A21B3B543008E2D3E /* SegmentView */ = {
 			isa = PBXGroup;
 			children = (
-				63B3E41B21B3B543008E2D3E /* SegmentView2.swift */,
+				63B3E41B21B3B543008E2D3E /* SegmentView.swift */,
 				63B3E41C21B3B543008E2D3E /* SegmentTitleView.swift */,
 				63B3E41D21B3B543008E2D3E /* SegmentContentView.swift */,
 				63B3E41E21B3B543008E2D3E /* SegmentConfiguration.swift */,
@@ -127,7 +127,7 @@
 				63DE94A421B2469800031E67 /* Assets.xcassets */,
 				63DE94A621B2469800031E67 /* LaunchScreen.storyboard */,
 				63DE94A921B2469800031E67 /* Info.plist */,
-				63DE94CD21B265C500031E67 /* SegmentView.swift */,
+				63DE94CD21B265C500031E67 /* SegmentPageView.swift */,
 				63DE94CF21B267B200031E67 /* Test1ViewController.swift */,
 			);
 			path = PageSegmentController;
@@ -288,8 +288,8 @@
 				63B3E42121B3B543008E2D3E /* SegmentContentView.swift in Sources */,
 				63DE94D021B267B200031E67 /* Test1ViewController.swift in Sources */,
 				63DE949E21B2469400031E67 /* AppDelegate.swift in Sources */,
-				63B3E41F21B3B543008E2D3E /* SegmentView2.swift in Sources */,
-				63DE94CE21B265C500031E67 /* SegmentView.swift in Sources */,
+				63B3E41F21B3B543008E2D3E /* SegmentView.swift in Sources */,
+				63DE94CE21B265C500031E67 /* SegmentPageView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

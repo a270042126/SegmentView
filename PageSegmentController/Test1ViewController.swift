@@ -14,14 +14,20 @@ class Test1ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.isTranslucent = false
-        segementVC = SegmentView()
-        segementVC.parentViewController = self
-        segementVC.titleArray = ["社会","科技","娱乐","体育育","美女美女","动物动物动物","体育1","美女1","动物1","动物动物动物","体育1","美女1","动物1","动物动物动物","体育1","美女1","动物1"]
-        for _ in segementVC.titleArray{
+        
+        let titleArray = ["社会","科技","娱乐","体育育","美女美女","动物动物动物","体育1","美女1","动物1","动物动物动物","体育1","美女1","动物1","动物动物动物","体育1","美女1","动物1"]
+        
+        var controllerArray = [UIViewController]()
+        for _ in titleArray{
             let vC = UIViewController()
             vC.view.backgroundColor = UIColor.randomColor()
-            segementVC.controllerArray.append(vC)
+            self.addChild(vC)
+            controllerArray.append(vC)
         }
+        let config = SegmentConfiguration()
+        segementVC = SegmentView(frame: .zero, configuration: config, titleArray: titleArray, controllerArray: controllerArray)
+       
+        
         self.view.addSubview(segementVC)
     }
     
@@ -29,7 +35,9 @@ class Test1ViewController: UIViewController {
         super.viewDidLayoutSubviews()
         segementVC.frame = self.view.bounds
     }
-
-
-
+    
+    override func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
+        segementVC.contentView.isForbidScroll = true
+    }
+   
 }

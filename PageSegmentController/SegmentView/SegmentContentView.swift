@@ -14,26 +14,23 @@ protocol SegmentContentViewDelegate: class {
 
 class SegmentContentView: UIView {
     
+    weak var delegate: SegmentContentViewDelegate?
+    var isForbidScroll = false
+    
     /// 初始化后，默认显示的页数
     public var currentIndex: Int = 0
     
     private var startOffsetX: CGFloat = 0
-    private var isForbidScroll = false
-    weak var delegate: SegmentContentViewDelegate?
    
-    
     //下方controller的scrollview
-    private lazy var mainCollectionView: UICollectionView = {[unowned self] in
-        let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: SegmentCollectionViewFlowLayout())
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.isPagingEnabled = true
-        collectionView.bounces = false
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.scrollsToTop = false
-        collectionView.contentInsetAdjustmentBehavior = .never
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "\(UICollectionViewCell.self)")
-        return collectionView
+    private lazy var mainScrollView: UIScrollView = {[unowned self] in
+        let scrollView = UIScrollView()
+        scrollView.delegate = self
+        scrollView.backgroundColor = UIColor.init(white: 0.900, alpha: 1.000)
+        scrollView.isPagingEnabled = true
+        scrollView.isScrollEnabled = true
+        scrollView.bounces = false
+        return scrollView
     }()
    
     //存储各栏目的controller
@@ -42,9 +39,11 @@ class SegmentContentView: UIView {
     init(frame: CGRect, controllerArray: [UIViewController]) {
         self.controllerArray = controllerArray
         super.init(frame: frame)
-        self.addSubview(mainCollectionView)
+        for vc in controllerArray {
+             mainScrollView.addSubview(vc.view)
+        }
+        self.addSubview(mainScrollView)
     }
-    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -53,39 +52,18 @@ class SegmentContentView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
        
-        mainCollectionView.frame = self.bounds
-        let layout = mainCollectionView.collectionViewLayout as! SegmentCollectionViewFlowLayout
-        layout.itemSize = self.bounds.size
-        layout.offset = CGFloat(currentIndex) * bounds.size.width
-    }
-
-}
-
-
-extension SegmentContentView: UICollectionViewDataSource{
-    
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return controllerArray.count
-    }
-    
-    
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(UICollectionViewCell.self)", for: indexPath)
+        mainScrollView.frame = self.bounds
+        mainScrollView.contentSize =  CGSize(width: self.bounds.width * CGFloat(controllerArray.count), height: self.bounds.height)
+        mainScrollView.contentOffset = CGPoint(x: self.bounds.width * CGFloat(currentIndex), y: 0)
         
-        for view in cell.contentView.subviews{
-            view.removeFromSuperview()
+        for(index, _) in controllerArray.enumerated(){
+            let controller = controllerArray[index]
+            controller.view.frame = CGRect(x: self.bounds.width * CGFloat(index), y: 0, width: self.bounds.width, height: self.bounds.height)
         }
-        
-        let childVc = controllerArray[indexPath.item]
-        childVc.view.frame = cell.contentView.bounds
-        cell.contentView.addSubview(childVc.view)
-        return cell
     }
 }
 
-extension SegmentContentView: UICollectionViewDelegate{
+extension SegmentContentView: UIScrollViewDelegate{
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         isForbidScroll = false
@@ -93,10 +71,6 @@ extension SegmentContentView: UICollectionViewDelegate{
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        updateUI(scrollView)
-    }
-    
-    private func updateUI(_ scrollView: UIScrollView){
         if isForbidScroll {return}
         
         var progress: CGFloat = 0
@@ -110,8 +84,7 @@ extension SegmentContentView: UICollectionViewDelegate{
         }
         
         let index = Int(scrollView.contentOffset.x / scrollView.bounds.width)
-        
-        if mainCollectionView.contentOffset.x > startOffsetX { // 左滑动
+        if mainScrollView.contentOffset.x > startOffsetX { // 左滑动
             sourceIndex = index
             targetIndex = index + 1
             guard targetIndex < controllerArray.count else { return }
@@ -128,28 +101,21 @@ extension SegmentContentView: UICollectionViewDelegate{
             progress = 1
         }
         
+        if progress > 0.5{
+            currentIndex = targetIndex
+        }else{
+            currentIndex = sourceIndex
+        }
         delegate?.segmentContentView(self, sourceIndex: sourceIndex, targetIndex: targetIndex, progress: progress)
-
     }
 }
 
 extension SegmentContentView{
     func setCurrentIndex(_ currentIndex: Int){
         isForbidScroll = true
-        let offsetX = CGFloat(currentIndex) * mainCollectionView.frame.width
-        mainCollectionView.setContentOffset(CGPoint(x:offsetX, y:0), animated: false)
+        self.currentIndex = currentIndex
+        let offsetX = CGFloat(currentIndex) * mainScrollView.frame.width
+        mainScrollView.setContentOffset(CGPoint(x:offsetX, y:0), animated: false)
     }
 }
 
-class SegmentCollectionViewFlowLayout: UICollectionViewFlowLayout {
-    var offset: CGFloat?
-    
-    override open func prepare() {
-        super.prepare()
-        guard let offset = offset else { return }
-        collectionView?.contentOffset = CGPoint(x: offset, y: 0)
-        minimumLineSpacing = 0
-        minimumInteritemSpacing = 0
-        scrollDirection = .horizontal
-    }
-}

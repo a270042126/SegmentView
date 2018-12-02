@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SegmentView: UIView {
+class SegmentPageView: UIView {
     
     //var titleWidth: CGFloat = 80
     var titleHeight: CGFloat = 40
@@ -135,7 +135,7 @@ class SegmentView: UIView {
 
 }
 
-extension SegmentView{
+extension SegmentPageView{
     
     private func setupUI(){
         self.addSubview(topScrollView)
@@ -186,7 +186,7 @@ extension SegmentView{
     
 }
 
-extension SegmentView: UIScrollViewDelegate{
+extension SegmentPageView: UIScrollViewDelegate{
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         isForbidScroll = false

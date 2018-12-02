@@ -8,13 +8,13 @@
 
 import UIKit
 
-class SegmentView2: UIView {
+class SegmentView: UIView {
     
     
     var config: SegmentConfiguration
     
-    private lazy var titleView: SegmentTitleView = SegmentTitleView(frame: .zero, config: config, titleArray: titleArray)
-    private lazy var contentView: SegmentContentView = SegmentContentView(frame: .zero, controllerArray: controllerArray)
+    lazy var titleView: SegmentTitleView = SegmentTitleView(frame: .zero, config: config, titleArray: titleArray)
+    lazy var contentView: SegmentContentView = SegmentContentView(frame: .zero, controllerArray: controllerArray)
     private var controllerArray: [UIViewController]
     private var titleArray: [String]
     
@@ -38,10 +38,9 @@ class SegmentView2: UIView {
         titleView.frame = CGRect(x: 0, y: 0, width: sWidth, height: config.titleHeight)
         contentView.frame = CGRect(x: 0, y: titleView.frame.maxY, width: sWidth, height: sHeight - config.titleHeight)
     }
-    
 }
 
-extension SegmentView2{
+extension SegmentView{
     
     private func setUI(){
         self.backgroundColor = UIColor.white
@@ -52,13 +51,13 @@ extension SegmentView2{
     }
 }
 
-extension SegmentView2: SegmentTitleViewDelegate{
+extension SegmentView: SegmentTitleViewDelegate{
     func segmentTitleView(_ titleView: SegmentTitleView, selectedIndex index: Int) {
         contentView.setCurrentIndex(index)
     }
 }
 
-extension SegmentView2: SegmentContentViewDelegate{
+extension SegmentView: SegmentContentViewDelegate{
     func segmentContentView(_ contentView: SegmentContentView, sourceIndex: Int, targetIndex: Int, progress: CGFloat) {
         titleView.setTitleWithProgress(progress, sourceIndex: sourceIndex, targetIndex: targetIndex)
     }

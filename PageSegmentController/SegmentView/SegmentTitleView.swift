@@ -13,7 +13,7 @@ protocol SegmentTitleViewDelegate: class {
 
 class SegmentTitleView: UIView {
     
-    var delegate: SegmentTitleViewDelegate?
+    weak var delegate: SegmentTitleViewDelegate?
     
     private var config: SegmentConfiguration
     private lazy var buttonArray = [UIButton]()
@@ -25,17 +25,13 @@ class SegmentTitleView: UIView {
         scrollView.isScrollEnabled = true
         return scrollView
     }()
+    
     //滑块
-    private lazy var sliderView: UIView = {
-        let sliderView = UIView()
-        sliderView.backgroundColor = UIColor.orange
-        sliderView.isHidden = !config.isShowSlider
-        return sliderView
-    }()
+    private lazy var sliderView: UIView = UIView()
     
     private var titleArray: [String]
     //选择的栏目
-    private var selectButton: UIButton?
+    private var currentIndex: Int = 0
     
     init(frame: CGRect, config:SegmentConfiguration, titleArray: [String]) {
         self.config = config
@@ -68,8 +64,12 @@ class SegmentTitleView: UIView {
         }
         
         scrollView.contentSize = CGSize(width: contentWidth, height: sHeight)
+        selectedButton(index: currentIndex)
+        
+        if config.isShowSlider{
+            moveSilder(moveX: buttonArray[currentIndex].frame.minX, changeWidth: buttonArray[currentIndex].frame.width)
+        }
     }
-    
 }
 
 extension SegmentTitleView {
@@ -80,37 +80,59 @@ extension SegmentTitleView {
         for(index, value) in titleArray.enumerated(){
             let titleButton = UIButton()
             titleButton.setTitle(value, for: .normal)
-            titleButton.setTitleColor(UIColor.black, for: .normal)
+            titleButton.setTitleColor(config.titleColor, for: .normal)
+            titleButton.setTitleColor(config.selectedTitleColor, for: .selected)
+            titleButton.backgroundColor = UIColor.clear
             titleButton.tag = 100 + index
-            titleButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+            titleButton.titleLabel?.font = UIFont.systemFont(ofSize: config.titleFontSize)
             titleButton.addTarget(self, action: #selector(scrollViewSelectToIndex), for:.touchUpInside)
             scrollView.addSubview(titleButton)
             if index == 0{
-                selectButton = titleButton
-                selectButton?.setTitleColor(UIColor.orange, for: .normal)
+                titleButton.isSelected = true
+                if config.isTitleScaleEnabled {
+                    let scale = config.titleMaximumScaleFactor
+                    titleButton.transform = CGAffineTransform(scaleX: scale, y: scale)
+                }
             }
             buttonArray.append(titleButton)
         }
-        var sliderViewWidth: CGFloat = 0
-        if config.titleWidth == 0{
-            sliderViewWidth = getTextWidth(text: selectButton!.titleLabel!.text!, height: config.titleHeight, fontSize: selectButton!.titleLabel!.font.pointSize)
-        }else{
-            sliderViewWidth = config.titleWidth
-        }
         
-        sliderView.frame = CGRect(x: config.padding, y: config.titleHeight - config.sliderHeight, width: sliderViewWidth, height: config.sliderHeight)
-
-        scrollView.addSubview(sliderView)
+        //滑块
+        if config.isShowSlider {
+            var sliderViewWidth: CGFloat = 0
+            if config.titleWidth == 0{
+                sliderViewWidth = getTextWidth(text: buttonArray.first!.titleLabel!.text!, height: config.titleHeight, fontSize:  buttonArray.first!.titleLabel!.font.pointSize)
+            }else{
+                sliderViewWidth = config.titleWidth
+            }
+            
+            switch config.sliderType {
+            case .line:
+                sliderView.backgroundColor = config.lineBackgroundColor
+                sliderView.frame = CGRect(x: config.padding, y: config.titleHeight - config.lineHeight, width: sliderViewWidth, height: config.lineHeight)
+            case .cover:
+                sliderView.backgroundColor = config.coverBackgroundColor
+                sliderView.layer.masksToBounds = true
+                sliderView.layer.cornerRadius = config.coverCornerRadius
+                sliderView.frame = CGRect(x: 0, y: (config.titleHeight - config.coverHeight) / 2, width: sliderViewWidth, height: config.coverHeight)
+            }
+           
+            scrollView.addSubview(sliderView)
+            scrollView.sendSubviewToBack(sliderView)
+        }
     }
     
     private func selectedButton(index:Int){
         let sWidth = self.bounds.width
-        selectButton?.setTitleColor(UIColor.black, for: .normal)
-        selectButton = buttonArray[index]
-        selectButton?.setTitleColor(UIColor.orange, for: .normal)
         
-        let rect = selectButton!.superview!.convert(selectButton!.frame, to: self)
-        let buttonWidth = selectButton!.frame.width
+        var selectButton = buttonArray[currentIndex]
+        selectButton.isSelected = false
+        selectButton = buttonArray[index]
+        currentIndex = index
+        selectButton.isSelected = true
+        
+        let rect = selectButton.superview!.convert(selectButton.frame, to: self)
+        let buttonWidth = selectButton.frame.width
         
         let contentWidth = buttonArray.last!.frame.maxX
         
@@ -133,18 +155,38 @@ extension SegmentTitleView {
     }
     
     @objc private func scrollViewSelectToIndex(sender: UIButton){
-        let index = sender.tag - 100
         
+        let index = sender.tag - 100
         selectedButton(index: index)
         
-        UIView.animate(withDuration: 0.25) {
-            self.sliderView.frame.origin.x = self.selectButton!.frame.minX + self.config.padding
-            self.sliderView.frame.size.width = self.selectButton!.frame.width - self.config.padding * 2
+        if config.isShowSlider {
+            let selectButton = buttonArray[index]
+            UIView.animate(withDuration: 0.25) {
+                self.moveSilder(moveX: selectButton.frame.minX, changeWidth: selectButton.frame.width)
+            }
         }
-        
         delegate?.segmentTitleView(self, selectedIndex: index)
     }
     
+    private func moveSilder(moveX: CGFloat, changeWidth: CGFloat){
+        switch config.sliderType {
+        case .line:
+            sliderView.frame.origin.x =  moveX + config.padding
+            sliderView.frame.size.width = changeWidth - config.padding * 2
+        case .cover:
+            sliderView.frame.origin.x =  moveX
+            sliderView.frame.size.width = changeWidth
+        }
+        
+    }
+    
+    private func setSelectedButtonScale(sourceIndex: Int, targetIndex: Int, progress: CGFloat){
+        guard config.isTitleScaleEnabled else {return}
+        let scale = config.titleMaximumScaleFactor - (config.titleMaximumScaleFactor - 1) * progress
+        buttonArray[sourceIndex].transform = CGAffineTransform(scaleX: scale, y: scale)
+        let scale2 = 1 + (config.titleMaximumScaleFactor - 1) * progress
+        buttonArray[targetIndex].transform = CGAffineTransform(scaleX: scale2, y: scale2)
+    }
 }
 
 extension SegmentTitleView{
@@ -156,9 +198,16 @@ extension SegmentTitleView{
         let moveX = moveTotalX * progress
         let moveWidth = (targetButton.frame.width - sourceButton.frame.width) * progress
 
-        self.sliderView.frame.origin.x = sourceButton.frame.origin.x + moveX + config.padding
-        self.sliderView.frame.size.width = sourceButton.frame.width + moveWidth - config.padding * 2
+        if config.isShowSlider{
+            moveSilder(moveX: sourceButton.frame.origin.x + moveX, changeWidth: sourceButton.frame.width + moveWidth)
+        }
 
-        self.selectedButton(index: Int(targetIndex))
+        if progress > 0.5{
+            self.selectedButton(index: Int(targetIndex))
+        }else{
+            self.selectedButton(index: Int(sourceIndex))
+        }
+        
+        setSelectedButtonScale(sourceIndex: sourceIndex, targetIndex: targetIndex, progress: progress)
     }
 }
