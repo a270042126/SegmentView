@@ -16,7 +16,7 @@ class Test1ViewController: UIViewController {
         self.navigationController?.navigationBar.isTranslucent = false
         segementVC = SegmentView()
         segementVC.parentViewController = self
-        segementVC.titleArray = ["社会","科技","娱乐","体育育","美女美女","动物动物动物","体育1","美女1","动物1"]
+        segementVC.titleArray = ["社会","科技","娱乐","体育育","美女美女","动物动物动物","体育1","美女1","动物1","动物动物动物","体育1","美女1","动物1","动物动物动物","体育1","美女1","动物1"]
         for _ in segementVC.titleArray{
             let vC = UIViewController()
             vC.view.backgroundColor = UIColor.randomColor()

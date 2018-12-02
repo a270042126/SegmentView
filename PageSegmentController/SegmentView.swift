@@ -15,42 +15,7 @@ class SegmentView: UIView {
     var sliderHeight: CGFloat = 2
     var padding:CGFloat = 15
     var isShowSlider = true
-    
-    private var startOffsetX: CGFloat = 0
-    private var isForbidScroll = false
     weak var parentViewController: UIViewController?
-    //选择的栏目
-    private var selectButton: UIButton?
-     //标题组
-    private lazy var buttonArray = [UIButton]()
-    //滑块
-    private lazy var sliderView: UIView = {
-        let sliderView = UIView()
-        sliderView.backgroundColor = UIColor.orange
-        sliderView.isHidden = !isShowSlider
-        return sliderView
-    }()
-    //下方controller的scrollview
-    private lazy var mainScrollView: UIScrollView = {[unowned self] in
-        let scrollView = UIScrollView()
-        scrollView.delegate = self
-        scrollView.backgroundColor = UIColor.init(white: 0.900, alpha: 1.000)
-        scrollView.isPagingEnabled = true
-        scrollView.isScrollEnabled = true
-        scrollView.bounces = false
-        return scrollView
-    }()
-    //上方的scrollview
-    private lazy var topScrollView:UIScrollView = {
-        //滑动ScrollView
-        let scrollView = UIScrollView()
-        scrollView.bounces = false
-        scrollView.showsHorizontalScrollIndicator = false
-        //让滚动条闪动一次
-        scrollView.flashScrollIndicators()
-        scrollView.backgroundColor = UIColor.white
-        return scrollView
-    }()
     
     //存储栏目标题
     var titleArray = [String](){
@@ -87,7 +52,44 @@ class SegmentView: UIView {
             }
         }
     }
-
+    
+    
+    
+    private var startOffsetX: CGFloat = 0
+    private var isForbidScroll = false
+    //选择的栏目
+    private var selectButton: UIButton?
+     //标题组
+    private lazy var buttonArray = [UIButton]()
+    //滑块
+    private lazy var sliderView: UIView = {
+        let sliderView = UIView()
+        sliderView.backgroundColor = UIColor.orange
+        sliderView.isHidden = !isShowSlider
+        return sliderView
+    }()
+    //下方controller的scrollview
+    private lazy var mainScrollView: UIScrollView = {[unowned self] in
+        let scrollView = UIScrollView()
+        scrollView.delegate = self
+        scrollView.backgroundColor = UIColor.init(white: 0.900, alpha: 1.000)
+        scrollView.isPagingEnabled = true
+        scrollView.isScrollEnabled = true
+        scrollView.bounces = false
+        return scrollView
+    }()
+    //上方的scrollview
+    private lazy var topScrollView:UIScrollView = {
+        //滑动ScrollView
+        let scrollView = UIScrollView()
+        scrollView.bounces = false
+        scrollView.showsHorizontalScrollIndicator = false
+        //让滚动条闪动一次
+        scrollView.flashScrollIndicators()
+        scrollView.backgroundColor = UIColor.white
+        return scrollView
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -118,7 +120,12 @@ class SegmentView: UIView {
         
         mainScrollView.frame = CGRect(x: 0, y: topScrollView.frame.maxY, width: sWidth, height: sHeight - titleHeight)
         mainScrollView.contentSize =  CGSize(width: sWidth * CGFloat(controllerArray.count), height: sHeight - titleHeight)
-        mainScrollView.contentOffset = CGPoint(x: selectButton!.frame.minX, y: 0)
+        
+        let index = selectButton!.tag - 100
+        mainScrollView.contentOffset = CGPoint(x: sWidth * CGFloat(index), y: 0)
+        selectedButton(index: index)
+        sliderView.frame.origin.x = buttonArray[index].frame.minX + padding
+        sliderView.frame.size.width = buttonArray[index].frame.width  - self.padding * 2
         
         for(index, _) in controllerArray.enumerated(){
             let controller = controllerArray[index]
@@ -188,37 +195,36 @@ extension SegmentView: UIScrollViewDelegate{
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
 
-        if isForbidScroll {return}
+        if isForbidScroll {
+            return
+        }
         
-        let currentOffsetX = scrollView.contentOffset.x
-        let scrollViewW = self.bounds.width
         var progress: CGFloat = 0
-        var sourceIndex: Int = 0
-        var targetIndex: Int = 0
+        var targetIndex = 0
+        var sourceIndex = 0
+   
+        progress = scrollView.contentOffset.x.truncatingRemainder(dividingBy: scrollView.bounds.width) / scrollView.bounds.width
+        if progress == 0 {
+            return
+        }
         
-        let index = Int(currentOffsetX / scrollViewW)
-        if index < 0 || index >= buttonArray.count {return}
+        let index = Int(scrollView.contentOffset.x / scrollView.bounds.width)
         
-        if currentOffsetX > startOffsetX{ //left
-            progress = currentOffsetX / scrollViewW - floor(currentOffsetX / scrollViewW)
+        if mainScrollView.contentOffset.x > startOffsetX { // 左滑动
             sourceIndex = index
-            
-            targetIndex = sourceIndex + 1
-            if targetIndex > buttonArray.count - 1{
-                targetIndex = buttonArray.count - 1
-            }
-            
-            if currentOffsetX - startOffsetX == scrollViewW{
-                progress = 1
-                targetIndex = sourceIndex
-            }
-        }else{
-            progress = 1 - (currentOffsetX / scrollViewW - floor(currentOffsetX / scrollViewW))
+            targetIndex = index + 1
+            guard targetIndex < controllerArray.count else { return }
+        } else {
+            sourceIndex = index + 1
             targetIndex = index
-            sourceIndex = targetIndex + 1
-            if sourceIndex > buttonArray.count - 1 {
-                sourceIndex = buttonArray.count - 1
+            progress = 1 - progress
+            if targetIndex < 0 {
+                return
             }
+        }
+        
+        if progress > 0.998 {
+            progress = 1
         }
         
         let sourceButton = buttonArray[sourceIndex]
@@ -231,7 +237,6 @@ extension SegmentView: UIScrollViewDelegate{
         self.sliderView.frame.size.width = sourceButton.frame.width + moveWidth - self.padding * 2
         
         self.selectedButton(index: Int(targetIndex))
-        
     }
 }
 
