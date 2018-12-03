@@ -13,7 +13,7 @@ enum SliderType: Int{
     case cover = 1
 }
 
-class SegmentConfiguration {
+class DGSegmentConfiguration {
     //标题
     public var titleHeight: CGFloat = 40
     public var titleWidth: CGFloat = 0

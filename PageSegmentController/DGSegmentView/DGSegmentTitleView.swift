@@ -7,15 +7,15 @@
 //
 
 import UIKit
-protocol SegmentTitleViewDelegate: class {
-    func segmentTitleView(_ titleView: SegmentTitleView, selectedIndex index: Int)
+protocol DGSegmentTitleViewDelegate: class {
+    func segmentTitleView(_ titleView: DGSegmentTitleView, selectedIndex index: Int)
 }
 
-class SegmentTitleView: UIView {
+class DGSegmentTitleView: UIView {
     
-    weak var delegate: SegmentTitleViewDelegate?
+    weak var delegate: DGSegmentTitleViewDelegate?
     
-    private var config: SegmentConfiguration!
+    private var config: DGSegmentConfiguration!
     
     var titleArray: [String]?{
         didSet{
@@ -90,7 +90,7 @@ class SegmentTitleView: UIView {
     //选择的栏目
     private var currentIndex: Int = 0
     
-    init(frame: CGRect, config:SegmentConfiguration) {
+    init(frame: CGRect, config:DGSegmentConfiguration) {
         self.config = config
         super.init(frame: frame)
         setUI()
@@ -129,7 +129,7 @@ class SegmentTitleView: UIView {
     }
 }
 
-extension SegmentTitleView {
+extension DGSegmentTitleView {
     
     private func setUI(){
         self.addSubview(scrollView)
@@ -201,7 +201,7 @@ extension SegmentTitleView {
     }
 }
 
-extension SegmentTitleView{
+extension DGSegmentTitleView{
     
     func setTitleWithProgress(_ progress : CGFloat, sourceIndex : Int, targetIndex : Int) {
         let sourceButton = buttonArray[sourceIndex]

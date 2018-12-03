@@ -7,10 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		63B3E41F21B3B543008E2D3E /* SegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B3E41B21B3B543008E2D3E /* SegmentView.swift */; };
-		63B3E42021B3B543008E2D3E /* SegmentTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B3E41C21B3B543008E2D3E /* SegmentTitleView.swift */; };
-		63B3E42121B3B543008E2D3E /* SegmentContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B3E41D21B3B543008E2D3E /* SegmentContentView.swift */; };
-		63B3E42221B3B543008E2D3E /* SegmentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B3E41E21B3B543008E2D3E /* SegmentConfiguration.swift */; };
+		63412CE721B4B76D00F23071 /* DGColumnMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63412CE621B4B76D00F23071 /* DGColumnMenuViewController.swift */; };
+		63412CE921B4C74800F23071 /* DGColumnMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63412CE821B4C74800F23071 /* DGColumnMenuCell.swift */; };
+		63412CEB21B4C7A000F23071 /* DGColumnMenuModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63412CEA21B4C7A000F23071 /* DGColumnMenuModel.swift */; };
+		63412CED21B4D38E00F23071 /* DGColumnMenuHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63412CEC21B4D38E00F23071 /* DGColumnMenuHeaderView.swift */; };
+		636E910721B54C5D0096F2C4 /* DGColumnMenu.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 636E910621B54C5D0096F2C4 /* DGColumnMenu.bundle */; };
+		63B3E41F21B3B543008E2D3E /* DGSegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B3E41B21B3B543008E2D3E /* DGSegmentView.swift */; };
+		63B3E42021B3B543008E2D3E /* DGSegmentTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B3E41C21B3B543008E2D3E /* DGSegmentTitleView.swift */; };
+		63B3E42121B3B543008E2D3E /* DGSegmentContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B3E41D21B3B543008E2D3E /* DGSegmentContentView.swift */; };
+		63B3E42221B3B543008E2D3E /* DGSegmentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B3E41E21B3B543008E2D3E /* DGSegmentConfiguration.swift */; };
 		63DE949E21B2469400031E67 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DE949D21B2469400031E67 /* AppDelegate.swift */; };
 		63DE94A021B2469400031E67 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DE949F21B2469400031E67 /* ViewController.swift */; };
 		63DE94A321B2469400031E67 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 63DE94A121B2469400031E67 /* Main.storyboard */; };
@@ -39,10 +44,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		63B3E41B21B3B543008E2D3E /* SegmentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentView.swift; sourceTree = "<group>"; };
-		63B3E41C21B3B543008E2D3E /* SegmentTitleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentTitleView.swift; sourceTree = "<group>"; };
-		63B3E41D21B3B543008E2D3E /* SegmentContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentContentView.swift; sourceTree = "<group>"; };
-		63B3E41E21B3B543008E2D3E /* SegmentConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentConfiguration.swift; sourceTree = "<group>"; };
+		63412CE621B4B76D00F23071 /* DGColumnMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DGColumnMenuViewController.swift; sourceTree = "<group>"; };
+		63412CE821B4C74800F23071 /* DGColumnMenuCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DGColumnMenuCell.swift; sourceTree = "<group>"; };
+		63412CEA21B4C7A000F23071 /* DGColumnMenuModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DGColumnMenuModel.swift; sourceTree = "<group>"; };
+		63412CEC21B4D38E00F23071 /* DGColumnMenuHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DGColumnMenuHeaderView.swift; sourceTree = "<group>"; };
+		636E910621B54C5D0096F2C4 /* DGColumnMenu.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = DGColumnMenu.bundle; sourceTree = "<group>"; };
+		63B3E41B21B3B543008E2D3E /* DGSegmentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DGSegmentView.swift; sourceTree = "<group>"; };
+		63B3E41C21B3B543008E2D3E /* DGSegmentTitleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DGSegmentTitleView.swift; sourceTree = "<group>"; };
+		63B3E41D21B3B543008E2D3E /* DGSegmentContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DGSegmentContentView.swift; sourceTree = "<group>"; };
+		63B3E41E21B3B543008E2D3E /* DGSegmentConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DGSegmentConfiguration.swift; sourceTree = "<group>"; };
 		63DE949A21B2469400031E67 /* PageSegmentController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PageSegmentController.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63DE949D21B2469400031E67 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		63DE949F21B2469400031E67 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -84,15 +94,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		63B3E41A21B3B543008E2D3E /* SegmentView */ = {
+		63412CE521B4B23A00F23071 /* DGColumnMenu */ = {
 			isa = PBXGroup;
 			children = (
-				63B3E41B21B3B543008E2D3E /* SegmentView.swift */,
-				63B3E41C21B3B543008E2D3E /* SegmentTitleView.swift */,
-				63B3E41D21B3B543008E2D3E /* SegmentContentView.swift */,
-				63B3E41E21B3B543008E2D3E /* SegmentConfiguration.swift */,
+				636E910621B54C5D0096F2C4 /* DGColumnMenu.bundle */,
+				63412CE621B4B76D00F23071 /* DGColumnMenuViewController.swift */,
+				63412CE821B4C74800F23071 /* DGColumnMenuCell.swift */,
+				63412CEC21B4D38E00F23071 /* DGColumnMenuHeaderView.swift */,
+				63412CEA21B4C7A000F23071 /* DGColumnMenuModel.swift */,
 			);
-			path = SegmentView;
+			path = DGColumnMenu;
+			sourceTree = "<group>";
+		};
+		63B3E41A21B3B543008E2D3E /* DGSegmentView */ = {
+			isa = PBXGroup;
+			children = (
+				63B3E41B21B3B543008E2D3E /* DGSegmentView.swift */,
+				63B3E41C21B3B543008E2D3E /* DGSegmentTitleView.swift */,
+				63B3E41D21B3B543008E2D3E /* DGSegmentContentView.swift */,
+				63B3E41E21B3B543008E2D3E /* DGSegmentConfiguration.swift */,
+			);
+			path = DGSegmentView;
 			sourceTree = "<group>";
 		};
 		63DE949121B2469400031E67 = {
@@ -118,7 +140,8 @@
 		63DE949C21B2469400031E67 /* PageSegmentController */ = {
 			isa = PBXGroup;
 			children = (
-				63B3E41A21B3B543008E2D3E /* SegmentView */,
+				63412CE521B4B23A00F23071 /* DGColumnMenu */,
+				63B3E41A21B3B543008E2D3E /* DGSegmentView */,
 				63DE949D21B2469400031E67 /* AppDelegate.swift */,
 				63DE949F21B2469400031E67 /* ViewController.swift */,
 				63DE94A121B2469400031E67 /* Main.storyboard */,
@@ -253,6 +276,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				63DE94A821B2469800031E67 /* LaunchScreen.storyboard in Resources */,
+				636E910721B54C5D0096F2C4 /* DGColumnMenu.bundle in Resources */,
 				63DE94A521B2469800031E67 /* Assets.xcassets in Resources */,
 				63DE94A321B2469400031E67 /* Main.storyboard in Resources */,
 			);
@@ -279,13 +303,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				63B3E42221B3B543008E2D3E /* SegmentConfiguration.swift in Sources */,
+				63B3E42221B3B543008E2D3E /* DGSegmentConfiguration.swift in Sources */,
+				63412CED21B4D38E00F23071 /* DGColumnMenuHeaderView.swift in Sources */,
+				63412CEB21B4C7A000F23071 /* DGColumnMenuModel.swift in Sources */,
 				63DE94A021B2469400031E67 /* ViewController.swift in Sources */,
-				63B3E42021B3B543008E2D3E /* SegmentTitleView.swift in Sources */,
-				63B3E42121B3B543008E2D3E /* SegmentContentView.swift in Sources */,
+				63B3E42021B3B543008E2D3E /* DGSegmentTitleView.swift in Sources */,
+				63412CE721B4B76D00F23071 /* DGColumnMenuViewController.swift in Sources */,
+				63B3E42121B3B543008E2D3E /* DGSegmentContentView.swift in Sources */,
+				63412CE921B4C74800F23071 /* DGColumnMenuCell.swift in Sources */,
 				63DE94D021B267B200031E67 /* Test1ViewController.swift in Sources */,
 				63DE949E21B2469400031E67 /* AppDelegate.swift in Sources */,
-				63B3E41F21B3B543008E2D3E /* SegmentView.swift in Sources */,
+				63B3E41F21B3B543008E2D3E /* DGSegmentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

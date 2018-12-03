@@ -8,13 +8,13 @@
 
 import UIKit
 
-protocol SegmentContentViewDelegate: class {
-    func segmentContentView(_ contentView: SegmentContentView,  sourceIndex: Int, targetIndex: Int, progress: CGFloat)
+protocol DGSegmentContentViewDelegate: class {
+    func segmentContentView(_ contentView: DGSegmentContentView,  sourceIndex: Int, targetIndex: Int, progress: CGFloat)
 }
 
-class SegmentContentView: UIView {
+class DGSegmentContentView: UIView {
     
-    weak var delegate: SegmentContentViewDelegate?
+    weak var delegate: DGSegmentContentViewDelegate?
     var isForbidScroll = false
     
     /// 初始化后，默认显示的页数
@@ -68,7 +68,7 @@ class SegmentContentView: UIView {
     }
 }
 
-extension SegmentContentView: UIScrollViewDelegate{
+extension DGSegmentContentView: UIScrollViewDelegate{
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         isForbidScroll = false
@@ -116,7 +116,7 @@ extension SegmentContentView: UIScrollViewDelegate{
     }
 }
 
-extension SegmentContentView{
+extension DGSegmentContentView{
     func setCurrentIndex(_ currentIndex: Int){
         isForbidScroll = true
         self.currentIndex = currentIndex

@@ -10,7 +10,7 @@ import UIKit
 
 class Test1ViewController: UIViewController {
 
-    var segementVC: SegmentView!
+    var segementVC: DGSegmentView!
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.isTranslucent = false
@@ -24,12 +24,28 @@ class Test1ViewController: UIViewController {
             self.addChild(vC)
             controllerArray.append(vC)
         }
-        let config = SegmentConfiguration()
-        segementVC = SegmentView(frame: .zero, configuration: config)
+        let config = DGSegmentConfiguration()
+        config.isAddChannelEnabled = true
+        segementVC = DGSegmentView(frame: .zero, configuration: config)
         segementVC.titleArray = titleArray
         segementVC.controllerArray = controllerArray
         
+        let button = UIButton()
+        button.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
+        button.setTitle("﹢", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+        button.setTitleColor(UIColor.black, for: .normal)
+        button.addTarget(self, action: #selector(buttonClicked), for: .touchUpInside)
+        segementVC.channelView.addSubview(button)
         self.view.addSubview(segementVC)
+    }
+    
+    @objc private func buttonClicked(){
+        let tagsArray = ["要闻","视频","娱乐","军事","新时代","独家","广东","社会","图文","段子","搞笑视频"]
+        let otherArrM = ["八卦","搞笑","短视频","图文段子","极限第一人"]
+        let columnMenuVC = DGColumnMenuViewController(tagsArray: tagsArray, otherArray: otherArrM)
+        columnMenuVC.delegate = self
+        self.present(columnMenuVC, animated: true, completion: nil)
     }
     
     override func viewDidLayoutSubviews() {
@@ -41,4 +57,10 @@ class Test1ViewController: UIViewController {
         segementVC.contentView.isForbidScroll = true
     }
    
+}
+
+extension Test1ViewController: DGColumnMenuViewDelegate{
+    func columnMenuView(tagsArray: [String], otherArray: [String]) {
+        print(tagsArray, otherArray)
+    }
 }

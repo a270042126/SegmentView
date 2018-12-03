@@ -8,25 +8,25 @@
 
 import UIKit
 
-class SegmentView: UIView {
+class DGSegmentView: UIView {
     
-    var controllerArray: [UIViewController]?{
+    var controllerArray: [UIViewController] = [UIViewController](){
         didSet{
             contentView.controllerArray = controllerArray
         }
     }
-    var titleArray: [String]?{
+    var titleArray: [String] = [String](){
         didSet{
             titleView.titleArray = titleArray
         }
     }
     
-    lazy var titleView: SegmentTitleView = SegmentTitleView(frame: .zero, config: config)
-    lazy var contentView: SegmentContentView = SegmentContentView(frame: .zero)
+    lazy var titleView: DGSegmentTitleView = DGSegmentTitleView(frame: .zero, config: config)
+    lazy var contentView: DGSegmentContentView = DGSegmentContentView(frame: .zero)
     lazy var channelView = UIView()
-    private var config: SegmentConfiguration
+    private var config: DGSegmentConfiguration
     
-    init(frame: CGRect,configuration: SegmentConfiguration) {
+    init(frame: CGRect,configuration: DGSegmentConfiguration) {
         self.config = configuration
         super.init(frame: frame)
         
@@ -63,14 +63,14 @@ class SegmentView: UIView {
 }
 
 
-extension SegmentView: SegmentTitleViewDelegate{
-    func segmentTitleView(_ titleView: SegmentTitleView, selectedIndex index: Int) {
+extension DGSegmentView: DGSegmentTitleViewDelegate{
+    func segmentTitleView(_ titleView: DGSegmentTitleView, selectedIndex index: Int) {
         contentView.setCurrentIndex(index)
     }
 }
 
-extension SegmentView: SegmentContentViewDelegate{
-    func segmentContentView(_ contentView: SegmentContentView, sourceIndex: Int, targetIndex: Int, progress: CGFloat) {
+extension DGSegmentView: DGSegmentContentViewDelegate{
+    func segmentContentView(_ contentView: DGSegmentContentView, sourceIndex: Int, targetIndex: Int, progress: CGFloat) {
         titleView.setTitleWithProgress(progress, sourceIndex: sourceIndex, targetIndex: targetIndex)
     }
 }
