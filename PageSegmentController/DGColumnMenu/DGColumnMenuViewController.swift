@@ -46,13 +46,14 @@ class DGColumnMenuViewController: UIViewController {
     private lazy var collectionView: UICollectionView = { [unowned self] in
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 5
-        layout.minimumInteritemSpacing = 4
+        layout.minimumInteritemSpacing = 0
         layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 4, right: 10);
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.backgroundColor = UIColor.clear
+        collectionView.contentInset = UIEdgeInsets(top: 20, left: 0, bottom: 30, right: 0)
         collectionView.register(DGColumnMenuCell.self, forCellWithReuseIdentifier: "\(DGColumnMenuCell.self)")
         collectionView.register(DGColumnMenuHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "\(DGColumnMenuHeaderView.self)")
         collectionView.addGestureRecognizer(longPress)
@@ -119,20 +120,24 @@ class DGColumnMenuViewController: UIViewController {
         navCloseButton.frame = CGRect(x: navCloseButtonX, y: navCloseButtonY, width: navCloseButtonWH, height: navCloseButtonWH)
         
         var sWidth: CGFloat = 0
-        if view.frame.width >= 500{
+        if view.frame.width >= 600{
             sWidth = view.frame.width * 3 / 4
         }else{
             sWidth = view.frame.width
         }
         
         let collectionViewX: CGFloat = (view.frame.width - sWidth) * 0.5
-        let collectionViewY = navView.frame.maxY + 20
+        let collectionViewY = navView.frame.maxY
         let collectionViewW = sWidth
-        let collectionViewH = view.frame.height
+        let collectionViewH = view.frame.height - navView.frame.maxY
         collectionView.frame = CGRect(x: collectionViewX, y: collectionViewY, width: collectionViewW, height: collectionViewH)
         
-        let itemWidth = collectionView.frame.width * 0.25 - 10
-        let itemHeight: CGFloat = 50
+        var magin: CGFloat = 10
+        if view.bounds.width < 375{
+            magin = 6
+        }
+        let itemWidth = collectionView.frame.width * 0.25 - magin
+        let itemHeight: CGFloat = 53
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         layout.itemSize = CGSize(width: itemWidth, height: itemHeight)
     }
@@ -156,9 +161,6 @@ extension DGColumnMenuViewController:  UICollectionViewDataSource, UICollectionV
         
         if indexPath.section == 0{
             cell.model = tagsArray[indexPath.item]
-            if indexPath.item == 0{
-                cell.titleLabel.textColor = UIColor.red
-            }
         }else{
             cell.model = otherArray[indexPath.item]
         }

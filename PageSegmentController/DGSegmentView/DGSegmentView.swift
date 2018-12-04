@@ -26,10 +26,9 @@ class DGSegmentView: UIView {
     lazy var channelView = UIView()
     private var config: DGSegmentConfiguration
     
-    init(frame: CGRect,configuration: DGSegmentConfiguration) {
+    init(frame: CGRect,configuration: DGSegmentConfiguration = DGSegmentConfiguration()) {
         self.config = configuration
         super.init(frame: frame)
-        
         self.backgroundColor = UIColor.white
         titleView.delegate = self
         contentView.delegate = self
