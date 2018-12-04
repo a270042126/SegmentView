@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DGColumnMenuModel {
+class ColumnMenuModel {
 
     /** title */
     var title: String = ""

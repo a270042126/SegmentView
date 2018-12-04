@@ -150,6 +150,7 @@ class DGColumnMenuCell: UICollectionViewCell {
 extension DGColumnMenuCell{
     
     private func updateUI(){
+        guard title != nil else {return}
         let margin:CGFloat = 2
         let textSize = getTextSize()
         let titleLabelW = textSize.width

@@ -8,16 +8,10 @@
 
 import UIKit
 
-protocol DGColumnMenuViewDelegate:class {
-    func columnMenuView(tagsArray: [DGColumnMenuModel], otherArray: [DGColumnMenuModel])
-}
-
 class DGColumnMenuViewController: UIViewController {
     
-    weak var delegate: DGColumnMenuViewDelegate?
-    
-    private lazy var tagsArray:[DGColumnMenuModel] = [DGColumnMenuModel]()
-    private lazy var otherArray:[DGColumnMenuModel] = [DGColumnMenuModel]()
+    lazy var tagsArray:[Any] = [Any]()
+    lazy var otherArray:[Any] = [Any]()
     
     private var isEdit = false
 
@@ -45,7 +39,7 @@ class DGColumnMenuViewController: UIViewController {
         return navCloseButton
     }()
     
-    private lazy var collectionView: UICollectionView = { [unowned self] in
+    lazy var collectionView: UICollectionView = { [unowned self] in
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 5
         layout.minimumInteritemSpacing = 0
@@ -63,16 +57,6 @@ class DGColumnMenuViewController: UIViewController {
     }()
     
     private lazy var longPress: UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPress(longPress:)))
-    
-    init(tagsArray:[DGColumnMenuModel], otherArray:[DGColumnMenuModel]) {
-        super.init(nibName: nil, bundle: nil)
-        self.tagsArray = tagsArray
-        self.otherArray = otherArray
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -144,14 +128,14 @@ extension DGColumnMenuViewController:  UICollectionViewDataSource, UICollectionV
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(DGColumnMenuCell.self)", for: indexPath) as! DGColumnMenuCell
         
         if indexPath.section == 0{
-            cell.title = tagsArray[indexPath.item].title
+            //cell.title = tagsArray[indexPath.item].title
             cell.isShowAddButton = false
             cell.isShowClose = isEdit
             if indexPath.item == 0{
                 cell.isDelete = false
             }
         }else{
-            cell.title = otherArray[indexPath.item].title
+            //cell.title = otherArray[indexPath.item].title
             cell.isShowAddButton = true
             cell.isShowClose = false
             cell.isDelete = true
@@ -192,7 +176,7 @@ extension DGColumnMenuViewController:  UICollectionViewDataSource, UICollectionV
     }
     
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        var model: DGColumnMenuModel
+        var model: Any
         if sourceIndexPath.section == 0{
             model = tagsArray[sourceIndexPath.item]
             tagsArray.remove(at: sourceIndexPath.item)
@@ -209,7 +193,6 @@ extension DGColumnMenuViewController:  UICollectionViewDataSource, UICollectionV
         }
         
         collectionView.reloadItems(at: [destinationIndexPath])
-        updateArray()
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -223,7 +206,6 @@ extension DGColumnMenuViewController:  UICollectionViewDataSource, UICollectionV
             collectionView.moveItem(at: indexPath, to: targetIndexPath)
             collectionView.reloadItems(at: [targetIndexPath])
             updateCloseButtonTag()
-            updateArray()
         }
     }
 }
@@ -267,7 +249,6 @@ extension DGColumnMenuViewController{
         collectionView.moveItem(at: indexPath, to: targetIndexPath)
         collectionView.reloadItems(at: [targetIndexPath])
         updateCloseButtonTag()
-        updateArray()
     }
     
     private func headViewButtonnClicked(){
@@ -282,12 +263,5 @@ extension DGColumnMenuViewController{
             let indexPath = collectionView.indexPath(for: cell)
             tempCell.closeButton.tag = indexPath!.item
         }
-    }
-    
-    private func updateArray(){
-//        let tempTagsArray = tagsArray.compactMap({$0.title})
-//        let tempOtherArray = otherArray.compactMap({$0.title})
-//        print(tempTagsArray,tempOtherArray)
-        delegate?.columnMenuView(tagsArray: tagsArray, otherArray: otherArray)
     }
 }

@@ -47,26 +47,9 @@ class Test1ViewController: UIViewController {
     
     @objc private func buttonClicked(){
         
-        var tagsArray = [DGColumnMenuModel]()
-        var otherArray = [DGColumnMenuModel]()
-        let tagsArrM = ["要闻","视频","娱乐","军事","新时代","独家","广东","社会","图文","段子","搞笑视频"]
-        let otherArrM = ["八卦","搞笑","短视频","图文段子","极限第一人"]
-        for value in tagsArrM {
-            let model = DGColumnMenuModel()
-            model.title = value
-            tagsArray.append(model)
-        }
+       
 
-        for value in otherArrM{
-            let model = DGColumnMenuModel()
-            model.title = value
-            otherArray.append(model)
-        }
-
-        let columnMenuVC = DGColumnMenuViewController(tagsArray: tagsArray, otherArray: otherArray)
-//        columnMenuVC.tagsArray = tagsArray
-//        columnMenuVC.otherArray = otherArray
-        //columnMenuVC.delegate = self
+        let columnMenuVC = HomeAddCategoryController()
         self.present(columnMenuVC, animated: true, completion: nil)
     }
     
