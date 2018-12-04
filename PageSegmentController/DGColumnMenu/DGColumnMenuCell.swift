@@ -10,9 +10,38 @@ import UIKit
 
 class DGColumnMenuCell: UICollectionViewCell {
     
-    var model: DGColumnMenuModel? {
+    var isShowClose = false{
         didSet{
-            switch model!.title.count {
+            if !isDelete {
+                 closeButton.isHidden = true
+            }else{
+                 closeButton.isHidden = !isShowClose
+            }
+        }
+    }
+    
+    var isShowAddButton = false{
+        didSet{
+            addButton.isHidden = !isShowAddButton
+            self.updateUI()
+        }
+    }
+    
+    var isDelete = true{
+        didSet{
+            if !isDelete {
+                closeButton.isHidden = true
+                titleLabel.textColor = UIColor.red
+            }else{
+                closeButton.isHidden = !isShowClose
+                titleLabel.textColor = UIColor.black
+            }
+        }
+    }
+    
+    var title:String? {
+        didSet{
+            switch title!.count {
             case 1, 2:
                 titleLabel.font = UIFont.systemFont(ofSize: 15)
             case 3:
@@ -22,19 +51,36 @@ class DGColumnMenuCell: UICollectionViewCell {
             default:
                 titleLabel.font = UIFont.systemFont(ofSize: 12)
             }
-            titleLabel.text = model!.title
-            
-            if !model!.isDelete {
-                closeButton.isHidden = true
-                titleLabel.textColor = UIColor.red
-            }else{
-                closeButton.isHidden = !model!.isShowClose
-                titleLabel.textColor = UIColor.black
-            }
-            addButton.isHidden = !model!.isShowAdd
+            titleLabel.text = title
             self.updateUI()
         }
     }
+    
+//    var model: DGColumnMenuModel? {
+//        didSet{
+//            switch model!.title.count {
+//            case 1, 2:
+//                titleLabel.font = UIFont.systemFont(ofSize: 15)
+//            case 3:
+//                titleLabel.font = UIFont.systemFont(ofSize: 14)
+//            case 4:
+//                titleLabel.font = UIFont.systemFont(ofSize: 13)
+//            default:
+//                titleLabel.font = UIFont.systemFont(ofSize: 12)
+//            }
+//            titleLabel.text = model!.title
+//
+//            if !model!.isDelete {
+//                closeButton.isHidden = true
+//                titleLabel.textColor = UIColor.red
+//            }else{
+//                closeButton.isHidden = !model!.isShowClose
+//                titleLabel.textColor = UIColor.black
+//            }
+//            addButton.isHidden = !model!.isShowAdd
+//            self.updateUI()
+//        }
+//    }
     
     lazy var addButton: UIButton = {
         let addButton = UIButton()
@@ -110,7 +156,7 @@ extension DGColumnMenuCell{
         let titleLabelH = textSize.height
         var titleLabelX: CGFloat = 0
         let titleLabelY = (titleView.frame.height - titleLabelH) * 0.5
-        if model!.isShowAdd{
+        if isShowAddButton{
             let addButtonWH:CGFloat = 10
             let addButtonX: CGFloat = (titleView.frame.width - titleLabelW - addButtonWH - margin) * 0.5
             let addButtonY = (titleView.frame.height - addButtonWH) * 0.5

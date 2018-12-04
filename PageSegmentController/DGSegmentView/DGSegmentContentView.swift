@@ -23,7 +23,7 @@ class DGSegmentContentView: UIView {
     private var startOffsetX: CGFloat = 0
    
     //下方controller的scrollview
-    private lazy var mainScrollView: UIScrollView = {[unowned self] in
+    private lazy var mainContentView: UIScrollView = {[unowned self] in
         let scrollView = UIScrollView()
         scrollView.delegate = self
         scrollView.backgroundColor = UIColor.init(white: 0.900, alpha: 1.000)
@@ -38,14 +38,14 @@ class DGSegmentContentView: UIView {
         didSet{
             guard let controllerArray = controllerArray else {return}
             for vc in controllerArray {
-                mainScrollView.addSubview(vc.view)
+                mainContentView.addSubview(vc.view)
             }
         }
     }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.addSubview(mainScrollView)
+        self.addSubview(mainContentView)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -55,11 +55,11 @@ class DGSegmentContentView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
        
-        mainScrollView.frame = self.bounds
+        mainContentView.frame = self.bounds
         
         guard  controllerArray != nil && controllerArray!.count > 0 else {return}
-        mainScrollView.contentSize =  CGSize(width: self.bounds.width * CGFloat(controllerArray!.count), height: self.bounds.height)
-        mainScrollView.contentOffset = CGPoint(x: self.bounds.width * CGFloat(currentIndex), y: 0)
+        mainContentView.contentSize =  CGSize(width: self.bounds.width * CGFloat(controllerArray!.count), height: self.bounds.height)
+        mainContentView.contentOffset = CGPoint(x: self.bounds.width * CGFloat(currentIndex), y: 0)
         
         for(index, _) in controllerArray!.enumerated(){
             let controller = controllerArray![index]
@@ -90,7 +90,7 @@ extension DGSegmentContentView: UIScrollViewDelegate{
         }
         
         let index = Int(scrollView.contentOffset.x / scrollView.bounds.width)
-        if mainScrollView.contentOffset.x > startOffsetX { // 左滑动
+        if mainContentView.contentOffset.x > startOffsetX { // 左滑动
             sourceIndex = index
             targetIndex = index + 1
             guard targetIndex < controllerArray.count else { return }
@@ -120,8 +120,8 @@ extension DGSegmentContentView{
     func setCurrentIndex(_ currentIndex: Int){
         isForbidScroll = true
         self.currentIndex = currentIndex
-        let offsetX = CGFloat(currentIndex) * mainScrollView.frame.width
-        mainScrollView.setContentOffset(CGPoint(x:offsetX, y:0), animated: false)
+        let offsetX = CGFloat(currentIndex) * mainContentView.frame.width
+        mainContentView.setContentOffset(CGPoint(x:offsetX, y:0), animated: false)
     }
 }
 

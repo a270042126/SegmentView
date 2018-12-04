@@ -72,4 +72,5 @@ extension DGSegmentView: DGSegmentContentViewDelegate{
     func segmentContentView(_ contentView: DGSegmentContentView, sourceIndex: Int, targetIndex: Int, progress: CGFloat) {
         titleView.setTitleWithProgress(progress, sourceIndex: sourceIndex, targetIndex: targetIndex)
     }
+
 }

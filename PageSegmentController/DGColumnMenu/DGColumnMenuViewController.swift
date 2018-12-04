@@ -9,7 +9,7 @@
 import UIKit
 
 protocol DGColumnMenuViewDelegate:class {
-    func columnMenuView(tagsArray: [String], otherArray: [String])
+    func columnMenuView(tagsArray: [DGColumnMenuModel], otherArray: [DGColumnMenuModel])
 }
 
 class DGColumnMenuViewController: UIViewController {
@@ -18,6 +18,7 @@ class DGColumnMenuViewController: UIViewController {
     
     private lazy var tagsArray:[DGColumnMenuModel] = [DGColumnMenuModel]()
     private lazy var otherArray:[DGColumnMenuModel] = [DGColumnMenuModel]()
+    
     private var isEdit = false
 
     private lazy var navView: UIView = {
@@ -25,6 +26,7 @@ class DGColumnMenuViewController: UIViewController {
         navView.backgroundColor = UIColor.black
         return navView
     }()
+    
     
     private lazy var navTitle: UILabel = {
        let navTitle = UILabel()
@@ -62,32 +64,15 @@ class DGColumnMenuViewController: UIViewController {
     
     private lazy var longPress: UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPress(longPress:)))
     
-    init(tagsArray:[String], otherArray:[String]) {
+    init(tagsArray:[DGColumnMenuModel], otherArray:[DGColumnMenuModel]) {
         super.init(nibName: nil, bundle: nil)
-        for (index, value) in tagsArray.enumerated(){
-            let model = DGColumnMenuModel()
-            model.title = value
-            model.isShowAdd = false
-            model.isShowClose = false
-            if index == 0 {
-                model.isDelete = false
-            }
-            self.tagsArray.append(model)
-        }
-        
-        for value in otherArray{
-            let model = DGColumnMenuModel()
-            model.title = value
-            model.isShowClose = false
-            self.otherArray.append(model)
-        }
+        self.tagsArray = tagsArray
+        self.otherArray = otherArray
     }
-    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -96,7 +81,6 @@ class DGColumnMenuViewController: UIViewController {
         navView.addSubview(navTitle)
         navView.addSubview(navCloseButton)
         self.view.addSubview(collectionView)
-        collectionView.reloadData()
     }
     
     override func viewDidLayoutSubviews() {
@@ -160,9 +144,17 @@ extension DGColumnMenuViewController:  UICollectionViewDataSource, UICollectionV
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(DGColumnMenuCell.self)", for: indexPath) as! DGColumnMenuCell
         
         if indexPath.section == 0{
-            cell.model = tagsArray[indexPath.item]
+            cell.title = tagsArray[indexPath.item].title
+            cell.isShowAddButton = false
+            cell.isShowClose = isEdit
+            if indexPath.item == 0{
+                cell.isDelete = false
+            }
         }else{
-            cell.model = otherArray[indexPath.item]
+            cell.title = otherArray[indexPath.item].title
+            cell.isShowAddButton = true
+            cell.isShowClose = false
+            cell.isDelete = true
         }
         cell.closeButton.tag = indexPath.item
         cell.closeButton.addTarget(self, action: #selector(cellButtonClicked(sender:)), for: .touchUpInside)
@@ -211,12 +203,8 @@ extension DGColumnMenuViewController:  UICollectionViewDataSource, UICollectionV
         
         
         if destinationIndexPath.section == 0 {
-            model.isShowClose = isEdit
-            model.isShowAdd = false
             tagsArray.insert(model, at: destinationIndexPath.item)
         } else if destinationIndexPath.section == 1{
-            model.isShowClose = false
-            model.isShowAdd = true
             otherArray.insert(model, at: destinationIndexPath.item)
         }
         
@@ -228,15 +216,12 @@ extension DGColumnMenuViewController:  UICollectionViewDataSource, UICollectionV
        
         if indexPath.section == 1{
             let model = otherArray[indexPath.item]
-            model.isShowAdd = false
-            model.isShowClose = isEdit
-            
-            collectionView.reloadItems(at: [indexPath])
             otherArray.remove(at: indexPath.item)
             tagsArray.append(model)
             
             let targetIndexPath = IndexPath(item: tagsArray.count - 1, section: 0)
             collectionView.moveItem(at: indexPath, to: targetIndexPath)
+            collectionView.reloadItems(at: [targetIndexPath])
             updateCloseButtonTag()
             updateArray()
         }
@@ -254,13 +239,10 @@ extension DGColumnMenuViewController{
         let point = longPress.location(in: collectionView)
         let indexPath = collectionView.indexPathForItem(at: point)
         if longPress.state == UIGestureRecognizer.State.began{//长按手势状态开始
-            if indexPath != nil && (indexPath!.item == 0 || indexPath!.section == 1){
+            if indexPath == nil {return}
+            if(indexPath!.item == 0 || indexPath!.section == 1){
                 return
             }
-//            if !isEdit && indexPath!.section == 0{
-//                headViewButtonnClicked()
-//            }
-            
             collectionView.beginInteractiveMovementForItem(at: indexPath!)
         }else if longPress.state == UIGestureRecognizer.State.changed{//长按手势状态改变
             if indexPath != nil && indexPath!.item == 0{
@@ -277,32 +259,19 @@ extension DGColumnMenuViewController{
     @objc private func cellButtonClicked(sender: UIButton){
         let index = sender.tag
         let model = tagsArray[index]
-        
-        model.isShowClose = false
-        model.isShowAdd = true
         let indexPath = IndexPath(item: index, section: 0)
-        collectionView.reloadItems(at: [indexPath])
-        
         tagsArray.remove(at: index)
         otherArray.insert(model, at: 0)
         
         let targetIndexPath = IndexPath(item: 0, section: 1)
         collectionView.moveItem(at: indexPath, to: targetIndexPath)
+        collectionView.reloadItems(at: [targetIndexPath])
         updateCloseButtonTag()
         updateArray()
     }
     
     private func headViewButtonnClicked(){
         isEdit = !isEdit
-        if(isEdit){
-            for item in tagsArray{
-                item.isShowClose = true
-            }
-        }else{
-            for item in tagsArray{
-                item.isShowClose = false
-            }
-        }
         collectionView.reloadData()
     }
     
@@ -316,9 +285,9 @@ extension DGColumnMenuViewController{
     }
     
     private func updateArray(){
-        let tempTagsArray = tagsArray.compactMap({$0.title})
-        let tempOtherArray = otherArray.compactMap({$0.title})
-        print(tempTagsArray,tempOtherArray)
-        delegate?.columnMenuView(tagsArray: tempTagsArray, otherArray: tempOtherArray)
+//        let tempTagsArray = tagsArray.compactMap({$0.title})
+//        let tempOtherArray = otherArray.compactMap({$0.title})
+//        print(tempTagsArray,tempOtherArray)
+        delegate?.columnMenuView(tagsArray: tagsArray, otherArray: otherArray)
     }
 }

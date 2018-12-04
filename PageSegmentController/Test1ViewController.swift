@@ -18,9 +18,14 @@ class Test1ViewController: UIViewController {
         let titleArray = ["社会","科技","娱乐","体育育","美女美女","动物动物动物","体育1","美女1","动物1","动物动物动物","体育1","美女1","动物1","动物动物动物","体育1","美女1","动物1"]
         
         var controllerArray = [UIViewController]()
-        for _ in titleArray{
+        for (index, _) in titleArray.enumerated(){
             let vC = UIViewController()
-            vC.view.backgroundColor = UIColor.randomColor()
+            if index == 0{
+                vC.view.backgroundColor = UIColor.orange
+            }else{
+                vC.view.backgroundColor = UIColor.randomColor()
+            }
+            
             self.addChild(vC)
             controllerArray.append(vC)
         }
@@ -41,10 +46,27 @@ class Test1ViewController: UIViewController {
     }
     
     @objc private func buttonClicked(){
-        let tagsArray = ["要闻","视频","娱乐","军事","新时代","独家","广东","社会","图文","段子","搞笑视频"]
+        
+        var tagsArray = [DGColumnMenuModel]()
+        var otherArray = [DGColumnMenuModel]()
+        let tagsArrM = ["要闻","视频","娱乐","军事","新时代","独家","广东","社会","图文","段子","搞笑视频"]
         let otherArrM = ["八卦","搞笑","短视频","图文段子","极限第一人"]
-        let columnMenuVC = DGColumnMenuViewController(tagsArray: tagsArray, otherArray: otherArrM)
-        columnMenuVC.delegate = self
+        for value in tagsArrM {
+            let model = DGColumnMenuModel()
+            model.title = value
+            tagsArray.append(model)
+        }
+
+        for value in otherArrM{
+            let model = DGColumnMenuModel()
+            model.title = value
+            otherArray.append(model)
+        }
+
+        let columnMenuVC = DGColumnMenuViewController(tagsArray: tagsArray, otherArray: otherArray)
+//        columnMenuVC.tagsArray = tagsArray
+//        columnMenuVC.otherArray = otherArray
+        //columnMenuVC.delegate = self
         self.present(columnMenuVC, animated: true, completion: nil)
     }
     
@@ -59,8 +81,8 @@ class Test1ViewController: UIViewController {
    
 }
 
-extension Test1ViewController: DGColumnMenuViewDelegate{
-    func columnMenuView(tagsArray: [String], otherArray: [String]) {
-        print(tagsArray, otherArray)
-    }
-}
+//extension Test1ViewController: DGColumnMenuViewDelegate{
+//    func columnMenuView(tagsArray: [AnyObject], otherArray: [AnyObject]) {
+//        print(tagsArray, otherArray)
+//    }
+//}

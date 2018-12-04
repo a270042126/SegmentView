@@ -222,4 +222,8 @@ extension DGSegmentTitleView{
         
         setSelectedButtonScale(sourceIndex: sourceIndex, targetIndex: targetIndex, progress: progress)
     }
+    
+    func setSelectedButton(index: Int){
+        selectedButton(index: index)
+    }
 }
