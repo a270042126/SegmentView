@@ -27,14 +27,25 @@ class DGColumnMenuHeaderView: UICollectionReusableView {
         return editButton
     }()
     
-    lazy var titleLabel: UILabel = {
+    var title:String?{
+        didSet{
+            titleLabel.text = title
+            updateUI()
+        }
+    }
+    var detail:String?{
+        didSet{
+            detailLabel.text = detail
+        }
+    }
+    private lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.font = UIFont.systemFont(ofSize: 16)
         titleLabel.textColor = UIColor.black
         return titleLabel
     }()
     
-    lazy var detailLabel: UILabel = {
+    private lazy var detailLabel: UILabel = {
         let detailLabel = UILabel()
         detailLabel.textColor = UIColor.lightGray
         detailLabel.font = UIFont.systemFont(ofSize: 14)
@@ -54,6 +65,15 @@ class DGColumnMenuHeaderView: UICollectionReusableView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        updateUI()
+        let editButtonW: CGFloat = 50
+        let editButtonH: CGFloat = 24
+        let editButtonX = bounds.width - editButtonW - 8
+        let editButtonY = (bounds.height - editButtonH) * 0.5
+        editButton.frame = CGRect(x: editButtonX, y: editButtonY, width: editButtonW, height: editButtonH)
+    }
+
+    private func updateUI(){
         let titleLabelX: CGFloat = 12
         let titleLabelW = getTextSize().width
         let titleLabelH: CGFloat = 16
@@ -65,14 +85,7 @@ class DGColumnMenuHeaderView: UICollectionReusableView {
         let detailLabelY: CGFloat = titleLabelY
         let detailLabelX = titleLabel.frame.maxX + 10
         detailLabel.frame = CGRect(x: detailLabelX, y: detailLabelY, width: detailLabelW, height: detailLabelH)
-        
-        let editButtonW: CGFloat = 50
-        let editButtonH: CGFloat = 24
-        let editButtonX = bounds.width - editButtonW - 8
-        let editButtonY = (bounds.height - editButtonH) * 0.5
-        editButton.frame = CGRect(x: editButtonX, y: editButtonY, width: editButtonW, height: editButtonH)
     }
-
 }
 
 extension DGColumnMenuHeaderView{

@@ -65,14 +65,16 @@ class DGColumnMenuCell: UICollectionViewCell {
     private lazy var titleView: UIView = {
         let titleView = UIView()
         titleView.backgroundColor = UIColor(red: 244/255.0, green: 244/255.0, blue: 244/255.0, alpha: 1)
+        titleView.layer.masksToBounds = true
+        titleView.layer.cornerRadius = 4
         return titleView
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(titleView)
+        contentView.addSubview(closeButton)
         titleView.addSubview(titleLabel)
-        titleView.addSubview(closeButton)
         titleView.addSubview(addButton)
     }
     
@@ -82,7 +84,11 @@ class DGColumnMenuCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        closeButton.frame = CGRect(x: contentView.frame.width - 25, y: -2, width: 18, height: 18)
+        
+        let closeButtonX = contentView.frame.width - 21
+        let closeButtonY: CGFloat = 4
+        let closeButtonWH: CGFloat = 18
+        closeButton.frame = CGRect(x: closeButtonX, y: closeButtonY, width: closeButtonWH, height: closeButtonWH)
         self.updateUI()
     }
 }
@@ -90,19 +96,29 @@ class DGColumnMenuCell: UICollectionViewCell {
 extension DGColumnMenuCell{
     
     private func updateUI(){
-        titleView.frame = CGRect(x: 5, y: 6.5, width: contentView.frame.width - 10, height: contentView.frame.height - 13)
         
+        let titleViewX: CGFloat = 5
+        let titleViewY: CGFloat = 6.5
+        let titleViewW = contentView.frame.width - 10
+        let titleViewH = contentView.frame.height - 13
+        titleView.frame = CGRect(x: titleViewX, y: titleViewY, width: titleViewW, height: titleViewH)
+        
+        var titleLabelCenterX: CGFloat
+        if model!.isShowAdd{
+            titleLabelCenterX = titleView.frame.width / 2 + 6
+        }else{
+            titleLabelCenterX = titleView.frame.width / 2
+        }
+        let  titleLabelCenterY = titleView.frame.height / 2
+        titleLabel.center = CGPoint(x: titleLabelCenterX, y: titleLabelCenterY)
         titleLabel.frame.size = getTextSize()
         
-        if model!.isShowAdd{
-            titleLabel.center = CGPoint(x: titleView.frame.width / 2 + 6, y: titleView.frame.height / 2)
-        }else{
-            titleLabel.center = CGPoint(x: titleView.frame.width / 2, y: titleView.frame.height / 2)
-        }
-        
-        addButton.frame.size = CGSize(width: 10, height: 10)
-        addButton.center.y = titleLabel.center.y
-        addButton.center.x = titleLabel.frame.minX - 8
+        let addButtonCenterX = titleLabel.frame.minX - 6
+        let addButtonCenterY = titleLabel.center.y
+        let addButtonWH: CGFloat = 10
+        addButton.center.y = addButtonCenterY
+        addButton.center.x = addButtonCenterX
+        addButton.frame.size = CGSize(width: addButtonWH, height: addButtonWH)
     }
     
     private func getTextSize() -> CGSize{

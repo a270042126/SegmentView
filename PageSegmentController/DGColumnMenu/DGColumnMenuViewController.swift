@@ -45,8 +45,8 @@ class DGColumnMenuViewController: UIViewController {
     
     private lazy var collectionView: UICollectionView = { [unowned self] in
         let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 4
-        layout.minimumInteritemSpacing = 5
+        layout.minimumLineSpacing = 5
+        layout.minimumInteritemSpacing = 4
         layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 4, right: 10);
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -100,16 +100,41 @@ class DGColumnMenuViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        let sWidth = self.view.bounds.width
         
-        navView.frame = CGRect(x: 0, y: 0, width: sWidth, height: 64)
-        navTitle.frame = CGRect(x: navView.center.x - 100, y: navView.center.y, width: 200, height: 20)
-        navCloseButton.frame = CGRect(x: navView.frame.width - 30, y: navTitle.frame.minY, width: 20, height: 20)
-    
-        collectionView.frame = CGRect(x: 0, y: navView.frame.maxY, width: view.frame.width, height: view.frame.height - navView.frame.height)
+        let navViewX: CGFloat = 0
+        let navViewY: CGFloat = 0
+        let navViewW = view.frame.width
+        let navViewH: CGFloat = 64
+        navView.frame = CGRect(x: navViewX, y: navViewY, width: navViewW, height: navViewH)
         
+        let navTitleX = navView.center.x - 100
+        let navTitleY = navView.center.y
+        let navTitleW: CGFloat = 200
+        let navTitleH: CGFloat = 20
+        navTitle.frame = CGRect(x: navTitleX, y: navTitleY, width: navTitleW, height: navTitleH)
+        
+        let navCloseButtonX = navView.frame.width - 30
+        let navCloseButtonY = navTitle.frame.minY
+        let navCloseButtonWH: CGFloat = 20
+        navCloseButton.frame = CGRect(x: navCloseButtonX, y: navCloseButtonY, width: navCloseButtonWH, height: navCloseButtonWH)
+        
+        var sWidth: CGFloat = 0
+        if view.frame.width >= 500{
+            sWidth = view.frame.width * 3 / 4
+        }else{
+            sWidth = view.frame.width
+        }
+        
+        let collectionViewX: CGFloat = (view.frame.width - sWidth) * 0.5
+        let collectionViewY = navView.frame.maxY + 20
+        let collectionViewW = sWidth
+        let collectionViewH = view.frame.height
+        collectionView.frame = CGRect(x: collectionViewX, y: collectionViewY, width: collectionViewW, height: collectionViewH)
+        
+        let itemWidth = collectionView.frame.width * 0.25 - 10
+        let itemHeight: CGFloat = 50
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
-        layout.itemSize = CGSize(width: collectionView.frame.width * 0.25 - 10, height: 53)
+        layout.itemSize = CGSize(width: itemWidth, height: itemHeight)
     }
 }
 
@@ -147,9 +172,9 @@ extension DGColumnMenuViewController:  UICollectionViewDataSource, UICollectionV
         let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "\(DGColumnMenuHeaderView.self )", for: indexPath) as! DGColumnMenuHeaderView
         
         if indexPath.section == 0 {
+            headerView.title = "已选择频道"
+            headerView.detail = "按住拖动调整排序"
             headerView.editButton.isHidden = false
-            headerView.titleLabel.text = "已选择频道"
-            headerView.detailLabel.text = "按住拖动调整排序"
             headerView.editButton.isSelected = isEdit
             headerView.editBtnClickedClosure = { [unowned self] in
                 self.headViewButtonnClicked()
@@ -157,11 +182,9 @@ extension DGColumnMenuViewController:  UICollectionViewDataSource, UICollectionV
             
         } else{
             headerView.editButton.isHidden = true
-            headerView.titleLabel.text = "选择频道"
-            headerView.detailLabel.text = "点击添加频道"
+            headerView.title = "选择频道"
+            headerView.detail = "点击添加频道"
         }
-        
-        
         return headerView
     }
     
