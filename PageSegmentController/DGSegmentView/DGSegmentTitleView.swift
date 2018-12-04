@@ -151,11 +151,11 @@ extension DGSegmentTitleView {
         currentIndex = index
         selectButton.isSelected = true
         
+        let contentWidth = buttonArray.last!.frame.maxX
+        if(contentWidth < sWidth){return}
+        
         let rect = selectButton.superview!.convert(selectButton.frame, to: self)
         let buttonWidth = selectButton.frame.width
-        
-        let contentWidth = buttonArray.last!.frame.maxX
-        
         let contentOffset = scrollView.contentOffset;
         if contentOffset.x <= (sWidth / 2 - rect.origin.x - buttonWidth / 2){ //回到左边
             scrollView.setContentOffset(CGPoint(x: 0, y: contentOffset.y), animated: true)
