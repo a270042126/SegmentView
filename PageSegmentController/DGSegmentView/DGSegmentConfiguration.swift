@@ -8,7 +8,7 @@
 
 import UIKit
 
-enum SliderType: Int{
+enum DGSliderType: Int{
     case line = 0
     case cover = 1
 }
@@ -27,7 +27,7 @@ class DGSegmentConfiguration {
     public var titleMaximumScaleFactor: CGFloat = 1.2
     //滑块
     public var isSliderEnable = true
-    public var sliderType = SliderType.line
+    public var sliderType = DGSliderType.line
     public var lineHeight: CGFloat = 2
     public var lineBackgroundColor: UIColor = UIColor.orange
     //遮盖

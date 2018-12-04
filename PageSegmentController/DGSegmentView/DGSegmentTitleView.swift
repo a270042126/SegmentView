@@ -44,17 +44,25 @@ class DGSegmentTitleView: UIView {
             //滑块
             if config.isSliderEnable {
                 var sliderViewWidth: CGFloat = 0
+                var sliderViewX:CGFloat = 0
+                
                 if config.titleWidth == 0{
                     sliderViewWidth = getTextWidth(text: buttonArray.first!.titleLabel!.text!, height: config.titleHeight, fontSize:  buttonArray.first!.titleLabel!.font.pointSize)
+                    sliderViewX = config.padding
                 }else{
                     sliderViewWidth = config.titleWidth
+                    sliderViewX = 0
                 }
                 
                 switch config.sliderType {
                 case .line:
-                    sliderView.frame = CGRect(x: config.padding, y: config.titleHeight - config.lineHeight, width: sliderViewWidth, height: config.lineHeight)
+                    sliderView.frame = CGRect(x: sliderViewX, y: config.titleHeight - config.lineHeight, width: sliderViewWidth, height: config.lineHeight)
                 case .cover:
-                    sliderView.frame = CGRect(x: 0, y: (config.titleHeight - config.coverHeight) / 2, width: sliderViewWidth, height: config.coverHeight)
+                    if config.titleWidth == 0{
+                        sliderViewWidth += config.padding * 2
+                    }
+                    sliderView.frame.size.height = config.coverHeight
+                    sliderView.frame.origin.y = (config.titleHeight - config.coverHeight) / 2
                 }
                 scrollView.addSubview(sliderView)
                 scrollView.sendSubviewToBack(sliderView)
@@ -112,11 +120,11 @@ class DGSegmentTitleView: UIView {
             let titleButton = buttonArray[index]
             var textWidth: CGFloat = 0
             if config.titleWidth == 0{
-                textWidth = getTextWidth(text: titleButton.titleLabel!.text!, height: sHeight, fontSize: titleButton.titleLabel!.font.pointSize)
+                textWidth = getTextWidth(text: titleButton.titleLabel!.text!, height: sHeight, fontSize: titleButton.titleLabel!.font.pointSize) + config.padding * 2
             }else{
                 textWidth = config.titleWidth
             }
-            titleButton.frame = CGRect(x: contentWidth, y: 0, width: (textWidth + config.padding * 2), height: sHeight)
+            titleButton.frame = CGRect(x: contentWidth, y: 0, width: (textWidth), height: sHeight)
             contentWidth += titleButton.frame.width
         }
         
@@ -183,8 +191,13 @@ extension DGSegmentTitleView {
     private func moveSilder(moveX: CGFloat, changeWidth: CGFloat){
         switch config.sliderType {
         case .line:
-            sliderView.frame.origin.x =  moveX + config.padding
-            sliderView.frame.size.width = changeWidth - config.padding * 2
+            if config.titleWidth == 0{
+                sliderView.frame.origin.x =  moveX + config.padding
+                sliderView.frame.size.width = changeWidth - config.padding * 2
+            }else{
+                sliderView.frame.origin.x =  moveX
+                sliderView.frame.size.width = changeWidth
+            }
         case .cover:
             sliderView.frame.origin.x =  moveX
             sliderView.frame.size.width = changeWidth
@@ -209,11 +222,11 @@ extension DGSegmentTitleView{
         let moveTotalX = targetButton.frame.origin.x - sourceButton.frame.origin.x
         let moveX = moveTotalX * progress
         let moveWidth = (targetButton.frame.width - sourceButton.frame.width) * progress
-
+        
         if config.isSliderEnable{
             moveSilder(moveX: sourceButton.frame.origin.x + moveX, changeWidth: sourceButton.frame.width + moveWidth)
         }
-
+        
         if progress > 0.5{
             self.selectedButton(index: Int(targetIndex))
         }else{
@@ -221,9 +234,5 @@ extension DGSegmentTitleView{
         }
         
         setSelectedButtonScale(sourceIndex: sourceIndex, targetIndex: targetIndex, progress: progress)
-    }
-    
-    func setSelectedButton(index: Int){
-        selectedButton(index: index)
     }
 }
