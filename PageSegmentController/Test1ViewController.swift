@@ -15,11 +15,11 @@ class Test1ViewController: UIViewController {
         super.viewDidLoad()
         self.navigationController?.navigationBar.isTranslucent = false
         
-        let titleArray = ["社会","科技","娱乐","体育育","美女美女","动物动物动物","体育1","美女1","动物1","动物动物动物","体育1","美女1","动物1","动物动物动物","体育1","美女1","动物1"]
+        let titleArray = ["社会","科技","娱乐","体育育","体育体育1","体育体育2","体育体育2","体育体育3"]
         
         var controllerArray = [UIViewController]()
         for (index, _) in titleArray.enumerated(){
-            let vC = UIViewController()
+            let vC = Test2ViewController()
             if index == 0{
                 vC.view.backgroundColor = UIColor.orange
             }else{

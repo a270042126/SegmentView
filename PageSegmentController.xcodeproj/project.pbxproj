@@ -26,6 +26,7 @@
 		63DE94B321B2469800031E67 /* PageSegmentControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DE94B221B2469800031E67 /* PageSegmentControllerTests.swift */; };
 		63DE94BE21B2469800031E67 /* PageSegmentControllerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DE94BD21B2469800031E67 /* PageSegmentControllerUITests.swift */; };
 		63DE94D021B267B200031E67 /* Test1ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DE94CF21B267B200031E67 /* Test1ViewController.swift */; };
+		63E9E10C21B7F33F0008E59F /* Test2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E9E10B21B7F33F0008E59F /* Test2ViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,7 @@
 		63DE94BD21B2469800031E67 /* PageSegmentControllerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageSegmentControllerUITests.swift; sourceTree = "<group>"; };
 		63DE94BF21B2469800031E67 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		63DE94CF21B267B200031E67 /* Test1ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test1ViewController.swift; sourceTree = "<group>"; };
+		63E9E10B21B7F33F0008E59F /* Test2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test2ViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +149,7 @@
 				63B3E41A21B3B543008E2D3E /* DGSegmentView */,
 				63DE949D21B2469400031E67 /* AppDelegate.swift */,
 				63DE949F21B2469400031E67 /* ViewController.swift */,
+				63E9E10B21B7F33F0008E59F /* Test2ViewController.swift */,
 				63412CEA21B4C7A000F23071 /* ColumnMenuModel.swift */,
 				6310686621B6B27C004FD4AA /* HomeAddCategoryController.swift */,
 				63DE94A121B2469400031E67 /* Main.storyboard */,
@@ -310,6 +313,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				63B3E42221B3B543008E2D3E /* DGSegmentConfiguration.swift in Sources */,
+				63E9E10C21B7F33F0008E59F /* Test2ViewController.swift in Sources */,
 				63412CED21B4D38E00F23071 /* DGColumnMenuHeaderView.swift in Sources */,
 				63412CEB21B4C7A000F23071 /* ColumnMenuModel.swift in Sources */,
 				6310685A21B678B8004FD4AA /* TestModel.swift in Sources */,

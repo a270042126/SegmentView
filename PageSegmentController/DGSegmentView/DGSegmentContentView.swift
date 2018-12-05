@@ -11,7 +11,7 @@ import UIKit
 protocol DGSegmentContentViewDelegate: class {
     func segmentContentView(_ contentView: DGSegmentContentView,  sourceIndex: Int, targetIndex: Int, progress: CGFloat)
 }
-
+private let CellID = "DGSegmentCell"
 class DGSegmentContentView: UIView {
     
     weak var delegate: DGSegmentContentViewDelegate?
@@ -19,27 +19,27 @@ class DGSegmentContentView: UIView {
     
     /// 初始化后，默认显示的页数
     public var currentIndex: Int = 0
-    
     private var startOffsetX: CGFloat = 0
    
     //下方controller的scrollview
-    private lazy var mainContentView: UIScrollView = {[unowned self] in
-        let scrollView = UIScrollView()
-        scrollView.delegate = self
-        scrollView.backgroundColor = UIColor.init(white: 0.900, alpha: 1.000)
-        scrollView.isPagingEnabled = true
-        scrollView.isScrollEnabled = true
-        scrollView.bounces = false
-        return scrollView
+    private lazy var mainContentView: UICollectionView = {[unowned self] in
+        let layout = DGSegmentViewFlowLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.isPagingEnabled = true
+        collectionView.scrollsToTop = false
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.bounces = false
+        collectionView.contentInsetAdjustmentBehavior = .never
+        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: CellID)
+        return collectionView
     }()
    
     //存储各栏目的controller
     var controllerArray: [UIViewController]?{
         didSet{
-            guard let controllerArray = controllerArray else {return}
-            for vc in controllerArray {
-                mainContentView.addSubview(vc.view)
-            }
+            mainContentView.reloadData()
         }
     }
 
@@ -54,21 +54,35 @@ class DGSegmentContentView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-       
         mainContentView.frame = self.bounds
-        
-        guard  controllerArray != nil && controllerArray!.count > 0 else {return}
-        mainContentView.contentSize =  CGSize(width: self.bounds.width * CGFloat(controllerArray!.count), height: self.bounds.height)
+        let layout = mainContentView.collectionViewLayout as! UICollectionViewFlowLayout
+        layout.itemSize = bounds.size
         mainContentView.contentOffset = CGPoint(x: self.bounds.width * CGFloat(currentIndex), y: 0)
-        
-        for(index, _) in controllerArray!.enumerated(){
-            let controller = controllerArray![index]
-            controller.view.frame = CGRect(x: self.bounds.width * CGFloat(index), y: 0, width: self.bounds.width, height: self.bounds.height)
-        }
     }
 }
 
-extension DGSegmentContentView: UIScrollViewDelegate{
+extension DGSegmentContentView: UICollectionViewDataSource, UICollectionViewDelegate{
+    
+    
+    
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return controllerArray?.count ?? 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellID, for: indexPath)
+        
+        for subview in cell.contentView.subviews {
+            subview.removeFromSuperview()
+        }
+        let childViewController = controllerArray![indexPath.item]
+        childViewController.view.frame = cell.contentView.bounds
+        cell.contentView.addSubview(childViewController.view)
+        
+        return cell
+    }
+    
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         isForbidScroll = false
@@ -125,3 +139,19 @@ extension DGSegmentContentView{
     }
 }
 
+class DGSegmentViewFlowLayout: UICollectionViewFlowLayout{
+    override func prepare() {
+        super.prepare()
+        minimumLineSpacing = 0
+        minimumInteritemSpacing = 0
+        scrollDirection = .horizontal
+    }
+    
+    override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+        if !newBounds.size.equalTo(collectionView!.bounds.size) {
+            itemSize = newBounds.size
+            return true
+        }
+        return false
+    }
+}
