@@ -63,9 +63,6 @@ class DGSegmentContentView: UIView {
 
 extension DGSegmentContentView: UICollectionViewDataSource, UICollectionViewDelegate{
     
-    
-    
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return controllerArray?.count ?? 0
     }
